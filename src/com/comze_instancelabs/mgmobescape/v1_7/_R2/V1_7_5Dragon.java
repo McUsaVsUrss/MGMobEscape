@@ -125,7 +125,7 @@ public class V1_7_5Dragon implements AbstractDragon {
 		MEDragon t_ = new MEDragon(m, arena, t, (net.minecraft.server.v1_7_R2.World) ((CraftWorld) t.getWorld()).getHandle(), temp);
 		((net.minecraft.server.v1_7_R2.World) w).addEntity(t_, CreatureSpawnEvent.SpawnReason.CUSTOM);
 		t_.setCustomName(m.dragon_name);
-
+		dragons.put(arena, t_);
 		return t_;
 	}
 	

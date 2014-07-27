@@ -5,15 +5,20 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,25 +30,25 @@ import com.comze_instancelabs.mgmobescape.v1_7._R4.V1_7_10Dragon;
 import com.comze_instancelabs.minigamesapi.Arena;
 import com.comze_instancelabs.minigamesapi.ArenaSetup;
 import com.comze_instancelabs.minigamesapi.ArenaState;
+import com.comze_instancelabs.minigamesapi.ArenaType;
 import com.comze_instancelabs.minigamesapi.MinigamesAPI;
 import com.comze_instancelabs.minigamesapi.PluginInstance;
 import com.comze_instancelabs.minigamesapi.config.ArenasConfig;
 import com.comze_instancelabs.minigamesapi.config.DefaultConfig;
 import com.comze_instancelabs.minigamesapi.config.MessagesConfig;
 import com.comze_instancelabs.minigamesapi.config.StatsConfig;
+import com.comze_instancelabs.minigamesapi.util.Cuboid;
 import com.comze_instancelabs.minigamesapi.util.Util;
 import com.comze_instancelabs.minigamesapi.util.Validator;
 
 public class Main extends JavaPlugin implements Listener {
 
-	// allow selecting team
-	// colorbomb
-	// map voting?
-
 	MinigamesAPI api = null;
 	PluginInstance pli = null;
 	static Main m = null;
-	ICommandHandler cmdhandler = new ICommandHandler();
+	ICommandHandler cmdhandler;
+
+	// TODO add into default config
 
 	public int destroy_radius = 10;
 	public String dragon_name = "Dragon";
@@ -58,6 +63,7 @@ public class Main extends JavaPlugin implements Listener {
 	public static HashMap<String, String> pteam = new HashMap<String, String>();
 
 	public void onEnable() {
+		cmdhandler = new ICommandHandler();
 		m = this;
 		getServer().getPluginManager().registerEvents(this, this);
 		String version = Bukkit.getServer().getClass().getPackage().getName().substring(Bukkit.getServer().getClass().getPackage().getName().lastIndexOf(".") + 1);
@@ -80,7 +86,7 @@ public class Main extends JavaPlugin implements Listener {
 		}
 		registerEntities();
 
-		api = MinigamesAPI.getAPI().setupAPI(this, "bowbash", IArena.class, new ArenasConfig(this), new MessagesConfig(this), new IClassesConfig(this), new StatsConfig(this, false), new DefaultConfig(this, false), false);
+		api = MinigamesAPI.getAPI().setupAPI(this, "mobescape", IArena.class, new ArenasConfig(this), new MessagesConfig(this), new IClassesConfig(this), new StatsConfig(this, false), new DefaultConfig(this, false), false);
 		PluginInstance pinstance = api.pinstances.get(this);
 		pinstance.addLoadedArenas(loadArenas(this, pinstance.getArenasConfig()));
 		Bukkit.getPluginManager().registerEvents(this, this);
@@ -116,7 +122,7 @@ public class Main extends JavaPlugin implements Listener {
 	}
 
 	public static IArena initArena(String arena) {
-		IArena a = new IArena(m, arena, "dragon"); //TODO allow wither too
+		IArena a = new IArena(m, arena, "dragon"); // TODO allow wither too
 		ArenaSetup s = MinigamesAPI.getAPI().pinstances.get(m).arenaSetup;
 		a.init(Util.getSignLocationFromArena(m, arena), Util.getAllSpawns(m, arena), Util.getMainLobby(m), Util.getComponentForArena(m, arena, "lobby"), s.getPlayerCount(m, arena, true), s.getPlayerCount(m, arena, false), s.getArenaVIP(m, arena));
 		return a;
@@ -124,17 +130,17 @@ public class Main extends JavaPlugin implements Listener {
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		cmdhandler.handleArgs(this, "mobescape", "/" + cmd.getName(), sender, args);
-		if(args.length > 0){
+		if (args.length > 0) {
 			String action = args[0];
-			if(action.equalsIgnoreCase("setmobspawn")){
-				if(args.length > 1){
+			if (action.equalsIgnoreCase("setmobspawn")) {
+				if (args.length > 1) {
 					String arena = args[1];
-					
+
 					if (!sender.hasPermission("mobescape.setup")) {
 						sender.sendMessage(pli.getMessagesConfig().no_perm);
 						return true;
 					}
-					if(sender instanceof Player){
+					if (sender instanceof Player) {
 						Player p = (Player) sender;
 						if (args.length > 1) {
 							Util.saveComponentForArena(m, arena, "mobspawn", p.getLocation());
@@ -144,24 +150,22 @@ public class Main extends JavaPlugin implements Listener {
 						}
 					}
 				}
-			}else if(action.equalsIgnoreCase("setflypoint")){
-				if(args.length > 1){
+			} else if (action.equalsIgnoreCase("setflypoint")) {
+				if (args.length > 1) {
 					String arena = args[1];
-					
+
 					if (!sender.hasPermission("mobescape.setup")) {
 						sender.sendMessage(pli.getMessagesConfig().no_perm);
 						return true;
 					}
-					if(sender instanceof Player){
+					if (sender instanceof Player) {
 						Player p = (Player) sender;
-						if (args.length > 1) {
-							int count = Util.getAllSpawns(m, arena).size();
-							Util.saveComponentForArena(m, arena, "flypoint.f" + Integer.toString(count), p.getLocation());
-							sender.sendMessage(pli.getMessagesConfig().successfully_set.replaceAll("<component>", "flypoint"));
-						} else {
-							sender.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.RED + "-" + ChatColor.DARK_GRAY + "]" + ChatColor.GRAY + " Usage: " + cmd + " " + action + " <arena>");
-						}
+						int count = getAllPoints(m, arena).size();
+						Util.saveComponentForArena(m, arena, "flypoint.f" + Integer.toString(count), p.getLocation());
+						sender.sendMessage(pli.getMessagesConfig().successfully_set.replaceAll("<component>", "flypoint " + Integer.toString(count)));
 					}
+				} else {
+					sender.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.RED + "-" + ChatColor.DARK_GRAY + "]" + ChatColor.GRAY + " Usage: " + cmd + " " + action + " <arena>");
 				}
 			}
 		}
@@ -196,4 +200,57 @@ public class Main extends JavaPlugin implements Listener {
 		}
 	}
 
+	@EventHandler
+	public void EntityChangeBlockEvent(org.bukkit.event.entity.EntityChangeBlockEvent event) {
+		if (event.getEntityType() == EntityType.FALLING_BLOCK) {
+			for (Arena a : MinigamesAPI.getAPI().pinstances.get(m).getArenas()) {
+				if (Validator.isArenaValid(m, a)) {
+					Cuboid c = new Cuboid(Util.getComponentForArena(m, a.getName(), "bounds.low"), Util.getComponentForArena(m, a.getName(), "bounds.high"));
+					if (c.containsLocWithoutY(event.getBlock().getLocation())) {
+						event.setCancelled(true);
+					}
+				}
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onMove(PlayerMoveEvent event) {
+		try {
+			final Player p = event.getPlayer();
+			if (pli.global_players.containsKey(p.getName())) {
+				final IArena a = (IArena) pli.global_players.get(p.getName());
+				if (!pli.global_lost.containsKey(p.getName())) {
+					if (a.getArenaState() == ArenaState.INGAME) {
+						if (p.getLocation().getBlockY() + 4 < a.lowbounds.getBlockY()) {
+							a.spectate(p.getName());
+							return;
+						}
+
+						int index = getAllPoints(m, a.getName()).size() - 1;
+						if (Math.abs(p.getLocation().getBlockX() - getAllPoints(m, a.getName()).get(index).getBlockX()) < 3 && Math.abs(p.getLocation().getBlockZ() - getAllPoints(m, a.getName()).get(index).getBlockZ()) < 3) {
+							a.stop();
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			for (StackTraceElement et : e.getStackTrace()) {
+				System.out.println(et);
+			}
+		}
+
+	}
+
+	public static ArrayList<Location> getAllPoints(JavaPlugin plugin, String arena) {
+		FileConfiguration config = MinigamesAPI.getAPI().pinstances.get(plugin).getArenasConfig().getConfig();
+		ArrayList<Location> ret = new ArrayList<Location>();
+		if (!config.isSet("arenas." + arena + ".flypoint")) {
+			return ret;
+		}
+		for (String spawn : config.getConfigurationSection("arenas." + arena + ".flypoint.").getKeys(false)) {
+			ret.add(Util.getComponentForArena(plugin, arena, "flypoint." + spawn));
+		}
+		return ret;
+	}
 }

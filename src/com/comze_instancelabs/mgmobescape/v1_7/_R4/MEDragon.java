@@ -90,10 +90,58 @@ public class MEDragon extends EntityEnderDragon implements AbstractMEDragon{
 	}
 
 	public Vector getNextPosition() {
-
+		
 		double tempx = this.locX;
 		double tempy = this.locY;
 		double tempz = this.locZ;
+
+		if (((Math.abs((int) tempx - points.get(currentid).getX()) == 0) && (Math.abs((int) tempz - points.get(currentid).getZ()) <= 3)) || ((Math.abs((int) tempz - points.get(currentid).getZ()) == 0) && (Math.abs((int) tempx - points.get(currentid).getX()) <= 3) && (Math.abs((int) tempy - points.get(currentid).getY()) <= 5))) {
+			if (currentid < points.size() - 1) {
+				currentid += 1;
+			} else {
+				// finish
+				MinigamesAPI.getAPI().pinstances.get(m).getArenaByName(arena).stop();
+			}
+
+			double disX = (this.locX - points.get(currentid).getX());
+			double disY = (this.locY - points.get(currentid).getY());
+			double disZ = (this.locZ - points.get(currentid).getZ());
+			
+			double tick_ = Math.sqrt(disX * disX + disY * disY + disZ * disZ) * 2 / m.mob_speed * Math.pow(0.98, currentid);
+
+			this.X = (Math.abs(disX) / tick_);
+			this.Y = (Math.abs(disY) / tick_);
+			this.Z = (Math.abs(disZ) / tick_);
+
+			if ((int)this.locX <= points.get(currentid).getX()) {
+				if ((int)this.locZ >= points.get(currentid).getZ()) {
+					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 180F;
+				} else {
+					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) - 90F;
+				}
+			} else { // (this.locX > points.get(currentid).getX())
+				if ((int)this.locZ >= points.get(currentid).getZ()) {
+					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 90F;
+				} else {
+					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z));
+				}
+			}
+
+		}
+
+		if ((int)this.locX <= points.get(currentid).getX()) {
+			if ((int)this.locZ >= points.get(currentid).getZ()) {
+				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 180F;
+			} else {
+				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) - 90F;
+			}
+		} else { // (this.locX > points.get(currentid).getX())
+			if ((int)this.locZ >= points.get(currentid).getZ()) {
+				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 90F;
+			} else {
+				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z));
+			}
+		}
 
 		if (tempx < points.get(currentid).getX())
 			tempx += this.X;
@@ -112,55 +160,7 @@ public class MEDragon extends EntityEnderDragon implements AbstractMEDragon{
 		else {
 			tempz -= this.Z;
 		}
-
-		if (((Math.abs((int) tempx - points.get(currentid).getX()) == 0) && (Math.abs((int) tempz - points.get(currentid).getZ()) <= 3)) || ((Math.abs((int) tempz - points.get(currentid).getZ()) == 0) && (Math.abs((int) tempx - points.get(currentid).getX()) <= 3) && (Math.abs((int) tempy - points.get(currentid).getY()) <= 5))) {
-			if (currentid < points.size() - 1) {
-				currentid += 1;
-			} else {
-				// finish
-				MinigamesAPI.getAPI().pinstances.get(m).getArenaByName(arena).stop();
-			}
-
-			double disX = (this.locX - points.get(currentid).getX());
-			double disY = (this.locY - points.get(currentid).getY());
-			double disZ = (this.locZ - points.get(currentid).getZ());
-
-			double tick_ = Math.sqrt(disX * disX + disY * disY + disZ * disZ) * 2 / m.mob_speed * Math.pow(0.98, currentid);
-
-			this.X = (Math.abs(disX) / tick_);
-			this.Y = (Math.abs(disY) / tick_);
-			this.Z = (Math.abs(disZ) / tick_);
-
-			if (this.locX <= points.get(currentid).getX()) {
-				if (this.locZ >= points.get(currentid).getZ()) {
-					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 180F;
-				} else {
-					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) - 90F;
-				}
-			} else { // (this.locX > points.get(currentid).getX())
-				if (this.locZ >= points.get(currentid).getZ()) {
-					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 90F;
-				} else {
-					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z));
-				}
-			}
-
-		}
-
-		if (this.locX <= points.get(currentid).getX()) {
-			if (this.locZ >= points.get(currentid).getZ()) {
-				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 180F;
-			} else {
-				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) - 90F;
-			}
-		} else { // (this.locX > points.get(currentid).getX())
-			if (this.locZ >= points.get(currentid).getZ()) {
-				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 90F;
-			} else {
-				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z));
-			}
-		}
-
+		
 		return new Vector(tempx, tempy, tempz);
 	}
 

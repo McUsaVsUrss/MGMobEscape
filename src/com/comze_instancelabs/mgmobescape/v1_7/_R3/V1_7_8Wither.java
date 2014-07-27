@@ -52,7 +52,7 @@ public class V1_7_8Wither implements AbstractWither {
 		MEWither t_ = new MEWither(m, arena, t, (net.minecraft.server.v1_7_R3.World) ((CraftWorld) t.getWorld()).getHandle(), temp);
 		((net.minecraft.server.v1_7_R3.World) w).addEntity(t_, CreatureSpawnEvent.SpawnReason.CUSTOM);
 		t_.setCustomName(m.dragon_name);
-
+		wither.put(arena, t_);
 		return t_;
 	}
 

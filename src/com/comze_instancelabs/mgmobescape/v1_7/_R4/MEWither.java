@@ -95,26 +95,6 @@ public class MEWither extends EntityWither implements AbstractMEWither{
 		double tempy = this.locY;
 		double tempz = this.locZ;
 
-
-		if (tempx < points.get(currentid).getX())
-			tempx += this.X;
-		else {
-			tempx -= this.X;
-		}
-
-		if ((int) tempy < points.get(currentid).getY()) {
-			tempy += this.Y;
-		} else {
-			tempy -= this.Y;
-		}
-
-		if (tempz < points.get(currentid).getZ())
-			tempz += this.Z;
-		else {
-			tempz -= this.Z;
-		}
-
-
 		if (((Math.abs((int) tempx - points.get(currentid).getX()) == 0) && (Math.abs((int) tempz - points.get(currentid).getZ()) <= 3)) || ((Math.abs((int) tempz - points.get(currentid).getZ()) == 0) && (Math.abs((int) tempx - points.get(currentid).getX()) <= 3) && (Math.abs((int) tempy - points.get(currentid).getY()) <= 5))) {
 			if (currentid < points.size() - 1) {
 				currentid += 1;
@@ -132,35 +112,53 @@ public class MEWither extends EntityWither implements AbstractMEWither{
 			this.X = (Math.abs(disX) / tick_);
 			this.Y = (Math.abs(disY) / tick_);
 			this.Z = (Math.abs(disZ) / tick_);
-			
-			if (this.locX <= points.get(currentid).getX()) {
-				if (this.locZ >= points.get(currentid).getZ()) {
-					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z));
+
+			if ((int)this.locX <= points.get(currentid).getX()) {
+				if ((int)this.locZ >= points.get(currentid).getZ()) {
+					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 180F;
 				} else {
-					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) - 270F;
+					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) - 90F;
 				}
 			} else { // (this.locX > points.get(currentid).getX())
-				if (this.locZ >= points.get(currentid).getZ()) {
-					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) - 90F;
+				if ((int)this.locZ >= points.get(currentid).getZ()) {
+					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 90F;
 				} else {
-					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) - 180F;
+					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z));
 				}
 			}
 
 		}
 
-		if (this.locX <= points.get(currentid).getX()) {
-			if (this.locZ >= points.get(currentid).getZ()) {
-				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z));
+		if ((int)this.locX <= points.get(currentid).getX()) {
+			if ((int)this.locZ >= points.get(currentid).getZ()) {
+				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 180F;
 			} else {
-				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 90F;
+				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) - 90F;
 			}
 		} else { // (this.locX > points.get(currentid).getX())
-			if (this.locZ >= points.get(currentid).getZ()) {
-				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) - 90F;
+			if ((int)this.locZ >= points.get(currentid).getZ()) {
+				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 90F;
 			} else {
-				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) - 180F;
+				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z));
 			}
+		}
+
+		if (tempx < points.get(currentid).getX())
+			tempx += this.X;
+		else {
+			tempx -= this.X;
+		}
+
+		if ((int) tempy < points.get(currentid).getY()) {
+			tempy += this.Y;
+		} else {
+			tempy -= this.Y;
+		}
+
+		if (tempz < points.get(currentid).getZ())
+			tempz += this.Z;
+		else {
+			tempz -= this.Z;
 		}
 		
 		return new Vector(tempx, tempy, tempz);

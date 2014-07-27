@@ -30,49 +30,51 @@ import com.comze_instancelabs.mgmobescape.v1_7._R4.V1_7_10Wither;
 public class Tools {
 
 	// the boolean parameters in this function are not used anymore
-	public void stop(final Main m, BukkitTask t, final String arena, boolean mode1_6, boolean mode1_7_5, String type) {
+	public void stop(final Main m, BukkitTask t, final String arena, boolean mode1_6, boolean mode1_7_5, final String type) {
 
-		try {
+		if(t != null){
 			t.cancel();
-		} catch (Exception e) {
-
 		}
 
-		if (type.equalsIgnoreCase("dragon")) {
-			if (m.mode1_6) {
-				V1_6Dragon v = new V1_6Dragon();
-				v.removeEnderdragon(arena);
-			} else if (m.mode1_7_5) {
-				V1_7_5Dragon v = new V1_7_5Dragon();
-				v.removeEnderdragon(arena);
-			} else if (m.mode1_7_8) {
-				V1_7_8Dragon v = new V1_7_8Dragon();
-				v.removeEnderdragon(arena);
-			} else if (m.mode1_7_10) {
-				V1_7_10Dragon v = new V1_7_10Dragon();
-				v.removeEnderdragon(arena);
-			} else {
-				V1_7Dragon v = new V1_7Dragon();
-				v.removeEnderdragon(arena);
+		Bukkit.getScheduler().runTaskLater(m, new Runnable(){
+			public void run(){
+				if (type.equalsIgnoreCase("dragon")) {
+					if (m.mode1_6) {
+						V1_6Dragon v = new V1_6Dragon();
+						v.removeEnderdragon(arena);
+					} else if (m.mode1_7_5) {
+						V1_7_5Dragon v = new V1_7_5Dragon();
+						v.removeEnderdragon(arena);
+					} else if (m.mode1_7_8) {
+						V1_7_8Dragon v = new V1_7_8Dragon();
+						v.removeEnderdragon(arena);
+					} else if (m.mode1_7_10) {
+						V1_7_10Dragon v = new V1_7_10Dragon();
+						v.removeEnderdragon(arena);
+					} else {
+						V1_7Dragon v = new V1_7Dragon();
+						v.removeEnderdragon(arena);
+					}
+				} else if (type.equalsIgnoreCase("wither")) {
+					if (m.mode1_6) {
+						V1_6Wither v = new V1_6Wither();
+						v.removeWither(arena);
+					} else if (m.mode1_7_5) {
+						V1_7_5Wither v = new V1_7_5Wither();
+						v.removeWither(arena);
+					} else if (m.mode1_7_8) {
+						V1_7_8Wither v = new V1_7_8Wither();
+						v.removeWither(arena);
+					} else if (m.mode1_7_10) {
+						V1_7_10Wither v = new V1_7_10Wither();
+						v.removeWither(arena);
+					} else {
+						V1_7Wither v = new V1_7Wither();
+						v.removeWither(arena);
+					}
+				}
 			}
-		} else if (type.equalsIgnoreCase("wither")) {
-			if (m.mode1_6) {
-				V1_6Wither v = new V1_6Wither();
-				v.removeWither(arena);
-			} else if (m.mode1_7_5) {
-				V1_7_5Wither v = new V1_7_5Wither();
-				v.removeWither(arena);
-			} else if (m.mode1_7_8) {
-				V1_7_8Wither v = new V1_7_8Wither();
-				v.removeWither(arena);
-			} else if (m.mode1_7_10) {
-				V1_7_10Wither v = new V1_7_10Wither();
-				v.removeWither(arena);
-			} else {
-				V1_7Wither v = new V1_7Wither();
-				v.removeWither(arena);
-			}
-		}
+		}, 10L);
 
 	}
 

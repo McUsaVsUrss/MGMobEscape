@@ -32,10 +32,14 @@ public class IArena extends Arena {
 
 	AbstractMEDragon dragon = null;
 	AbstractMEWither wither = null;
+	
+	public Location lowbounds = null;
+	public Location highbounds = null;
 
-	public IArena(Main m, String arena_id, String mobmobtype) {
+	public IArena(Main m, String arena_id, String mobtype) {
 		super(m, arena_id, ArenaType.REGENERATION);
-		m.m = m;
+		this.mobtype = mobtype;
+		this.m = m;
 	}
 
 	@Override
@@ -45,11 +49,17 @@ public class IArena extends Arena {
 
 	@Override
 	public void spectate(String playername) {
-
+		super.spectate(playername);
+		if (this.getPlayerAlive() < 2) {
+			this.stop();
+			return;
+		}
 	}
 
 	@Override
 	public void start(boolean tp) {
+		this.lowbounds = Util.getComponentForArena(m, this.getName(), "bounds.low");
+		this.highbounds = Util.getComponentForArena(m, this.getName(), "bounds.high");
 		this.start();
 		super.start(tp);
 	}
@@ -96,9 +106,11 @@ public class IArena extends Arena {
 				f_ = true;
 			}
 
-			currenttask = Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(m, new Runnable() {
+			//currenttask = Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(m, new Runnable() {
+			currenttask = Bukkit.getServer().getScheduler().runTaskTimer(m, new Runnable() {
 				@Override
 				public void run() {
+					//TODO add wither functionality
 					Vector v = dragon.getNextPosition();
 					if (v != null && dragon != null) {
 						// TODO add setPosition to each MEDragon class
@@ -170,9 +182,13 @@ public class IArena extends Arena {
 	@Override
 	public void stop() {
 		this.stop(currenttask, this.getName());
+		super.stop();
 	}
 
 	public void stop(BukkitTask t, final String arena) {
+		if(t != null){
+			t.cancel();
+		}
 		if (m.mode1_6) {
 			if (mobtype.equalsIgnoreCase("dragon")) {
 				V1_6Dragon v = new V1_6Dragon();
@@ -237,22 +253,12 @@ public class IArena extends Arena {
 
 	public ArrayList<Vector> getDragonWayPoints(String arena) {
 		ArrayList<Vector> ret = new ArrayList<Vector>();
-		for (Location l : getAllPoints(m, arena)) {
+		for (Location l : m.getAllPoints(m, arena)) {
 			ret.add(new Vector(l.getX(), l.getY(), l.getZ()));
 		}
 		return ret;
 	}
 
-	public static ArrayList<Location> getAllPoints(JavaPlugin plugin, String arena) {
-		FileConfiguration config = MinigamesAPI.getAPI().pinstances.get(plugin).getArenasConfig().getConfig();
-		ArrayList<Location> ret = new ArrayList<Location>();
-		if (!config.isSet("arenas." + arena + ".flypoint")) {
-			return ret;
-		}
-		for (String spawn : config.getConfigurationSection("arenas." + arena + ".flypoint.").getKeys(false)) {
-			ret.add(Util.getComponentForArena(plugin, arena, "flypoint." + spawn));
-		}
-		return ret;
-	}
+	
 
 }
