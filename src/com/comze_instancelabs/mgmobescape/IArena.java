@@ -22,6 +22,7 @@ import com.comze_instancelabs.mgmobescape.v1_7._R4.V1_7_10Wither;
 import com.comze_instancelabs.minigamesapi.Arena;
 import com.comze_instancelabs.minigamesapi.ArenaType;
 import com.comze_instancelabs.minigamesapi.MinigamesAPI;
+import com.comze_instancelabs.minigamesapi.config.ArenasConfig;
 import com.comze_instancelabs.minigamesapi.util.Util;
 
 public class IArena extends Arena {
@@ -36,9 +37,14 @@ public class IArena extends Arena {
 	public Location lowbounds = null;
 	public Location highbounds = null;
 
-	public IArena(Main m, String arena_id, String mobtype) {
+	public IArena(Main m, String arena_id) {
 		super(m, arena_id, ArenaType.REGENERATION);
-		this.mobtype = mobtype;
+		ArenasConfig config = MinigamesAPI.getAPI().pinstances.get(m).getArenasConfig();
+		if(config.getConfig().isSet("arenas." + this.getName() + ".mobtype")){
+			this.mobtype = config.getConfig().getString("arenas." + this.getName() + ".mobtype");
+		}else{
+			this.mobtype = "dragon";
+		}
 		this.m = m;
 	}
 
@@ -110,30 +116,67 @@ public class IArena extends Arena {
 			currenttask = Bukkit.getServer().getScheduler().runTaskTimer(m, new Runnable() {
 				@Override
 				public void run() {
-					//TODO add wither functionality
-					Vector v = dragon.getNextPosition();
-					if (v != null && dragon != null) {
-						// TODO add setPosition to each MEDragon class
-						dragon.setPosition(v.getX(), v.getY(), v.getZ());
-					}
+					if(dragon != null){
+						Vector v = dragon.getNextPosition();
+						if (v != null) {
+							dragon.setPosition(v.getX(), v.getY(), v.getZ());
+						}
 
-					ad.destroy(m, l1, l2, arena, length2);
+						ad.destroy(m, l1, l2, arena, length2);
+					}
+					
 				}
 			}, 3 + 20, 3);
 
 		} else {
-			AbstractWither aw = null;
+			AbstractWither aw_ = null;
 			if (m.mode1_6) {
-				aw = new V1_6Wither();
+				aw_ = new V1_6Wither();
 			} else if (m.mode1_7_5) {
-				aw = new V1_7_5Wither();
+				aw_ = new V1_7_5Wither();
 			} else if (m.mode1_7_8) {
-				aw = new V1_7_8Wither();
+				aw_ = new V1_7_8Wither();
 			} else if (m.mode1_7_10) {
-				aw = new V1_7_10Wither();
+				aw_ = new V1_7_10Wither();
 			} else {
-				aw = new V1_7Wither();
+				aw_ = new V1_7Wither();
 			}
+			
+			final AbstractWither aw = aw_;
+
+			final Location l1 = Util.getComponentForArena(m, arena, "bounds.low");
+			final Location l2 = Util.getComponentForArena(m, arena, "bounds.high");
+
+			int length1 = l1.getBlockX() - l2.getBlockX();
+			final int length2 = l1.getBlockY() - l2.getBlockY();
+			int length3 = l1.getBlockZ() - l2.getBlockZ();
+			boolean f = false;
+			boolean f_ = false;
+			if (l2.getBlockX() > l1.getBlockX()) {
+				length1 = l2.getBlockX() - l1.getBlockX();
+				f = true;
+			}
+
+			if (l2.getBlockZ() > l1.getBlockZ()) {
+				length3 = l2.getBlockZ() - l1.getBlockZ();
+				f_ = true;
+			}
+
+			//currenttask = Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(m, new Runnable() {
+			currenttask = Bukkit.getServer().getScheduler().runTaskTimer(m, new Runnable() {
+				@Override
+				public void run() {
+					if(wither != null){
+						Vector v = wither.getNextPosition();
+						if (v != null) {
+							wither.setPosition(v.getX(), v.getY(), v.getZ());
+						}
+
+						aw.destroy(m, l1, l2, arena, length2);
+					}
+					
+				}
+			}, 3 + 20, 3);
 		}
 	}
 

@@ -122,7 +122,7 @@ public class Main extends JavaPlugin implements Listener {
 	}
 
 	public static IArena initArena(String arena) {
-		IArena a = new IArena(m, arena, "dragon"); // TODO allow wither too
+		IArena a = new IArena(m, arena);
 		ArenaSetup s = MinigamesAPI.getAPI().pinstances.get(m).arenaSetup;
 		a.init(Util.getSignLocationFromArena(m, arena), Util.getAllSpawns(m, arena), Util.getMainLobby(m), Util.getComponentForArena(m, arena, "lobby"), s.getPlayerCount(m, arena, true), s.getPlayerCount(m, arena, false), s.getArenaVIP(m, arena));
 		return a;
@@ -166,6 +166,24 @@ public class Main extends JavaPlugin implements Listener {
 					}
 				} else {
 					sender.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.RED + "-" + ChatColor.DARK_GRAY + "]" + ChatColor.GRAY + " Usage: " + cmd + " " + action + " <arena>");
+				}
+			} else if (action.equalsIgnoreCase("setmobtype")) {
+				if (args.length > 2) {
+					String arena = args[1];
+
+					if (!sender.hasPermission("mobescape.setup")) {
+						sender.sendMessage(pli.getMessagesConfig().no_perm);
+						return true;
+					}
+					if (sender instanceof Player) {
+						Player p = (Player) sender;
+						ArenasConfig config = MinigamesAPI.getAPI().pinstances.get(m).getArenasConfig();
+						config.getConfig().set("arenas." + arena + ".mobtype", args[2]);
+						config.saveConfig();
+						sender.sendMessage(pli.getMessagesConfig().successfully_set.replaceAll("<component>", "mobtype"));
+					}
+				} else {
+					sender.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.RED + "-" + ChatColor.DARK_GRAY + "]" + ChatColor.GRAY + " Usage: " + cmd + " " + action + " <arena> <mobtype>");
 				}
 			}
 		}
