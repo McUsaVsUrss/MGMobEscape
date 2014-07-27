@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
 import com.comze_instancelabs.mgmobescape.AbstractMEDragon;
+import com.comze_instancelabs.mgmobescape.IArena;
 import com.comze_instancelabs.mgmobescape.Main;
 import com.comze_instancelabs.minigamesapi.MinigamesAPI;
 
@@ -23,12 +24,12 @@ public class MEDragon extends EntityEnderDragon implements AbstractMEDragon{
 	private double Y;
 	private double Z;
 	private Main m;
-	private String arena;
+	private IArena arena;
 
 	public MEDragon(Main m, String arena, Location loc, World world, ArrayList<Vector> p) {
 		super(world);
 		this.m = m;
-		this.arena = arena;
+		this.arena = (IArena) MinigamesAPI.getAPI().pinstances.get(m).getArenaByName(arena);
 		currentid = 0;
 		this.points = p;
 		setPosition(loc.getX(), loc.getY(), loc.getZ());
@@ -100,7 +101,18 @@ public class MEDragon extends EntityEnderDragon implements AbstractMEDragon{
 				currentid += 1;
 			} else {
 				// finish
-				MinigamesAPI.getAPI().pinstances.get(m).getArenaByName(arena).stop();
+				arena.stop();
+			}
+			
+			ArrayList<String> temp = arena.getAllPlayers();
+			for (String p : temp) {
+				if (m.ppoint.containsKey(p)) {
+					System.out.println("p:" + m.ppoint.get(p) + " d:" + currentid);
+					if (m.ppoint.get(p) < currentid - 1) {
+						// player fell behind mob
+						arena.spectate(p);
+					}
+				}
 			}
 
 			double disX = (this.locX - points.get(currentid).getX());

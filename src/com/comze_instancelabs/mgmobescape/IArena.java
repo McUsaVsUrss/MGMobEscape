@@ -1,11 +1,10 @@
 package com.comze_instancelabs.mgmobescape;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
@@ -33,16 +32,16 @@ public class IArena extends Arena {
 
 	AbstractMEDragon dragon = null;
 	AbstractMEWither wither = null;
-	
+
 	public Location lowbounds = null;
 	public Location highbounds = null;
 
 	public IArena(Main m, String arena_id) {
 		super(m, arena_id, ArenaType.REGENERATION);
 		ArenasConfig config = MinigamesAPI.getAPI().pinstances.get(m).getArenasConfig();
-		if(config.getConfig().isSet("arenas." + this.getName() + ".mobtype")){
+		if (config.getConfig().isSet("arenas." + this.getName() + ".mobtype")) {
 			this.mobtype = config.getConfig().getString("arenas." + this.getName() + ".mobtype");
-		}else{
+		} else {
 			this.mobtype = "dragon";
 		}
 		this.m = m;
@@ -112,11 +111,11 @@ public class IArena extends Arena {
 				f_ = true;
 			}
 
-			//currenttask = Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(m, new Runnable() {
+			// currenttask = Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(m, new Runnable() {
 			currenttask = Bukkit.getServer().getScheduler().runTaskTimer(m, new Runnable() {
 				@Override
 				public void run() {
-					if(dragon != null){
+					if (dragon != null) {
 						Vector v = dragon.getNextPosition();
 						if (v != null) {
 							dragon.setPosition(v.getX(), v.getY(), v.getZ());
@@ -124,7 +123,6 @@ public class IArena extends Arena {
 
 						ad.destroy(m, l1, l2, arena, length2);
 					}
-					
 				}
 			}, 3 + 20, 3);
 
@@ -141,7 +139,7 @@ public class IArena extends Arena {
 			} else {
 				aw_ = new V1_7Wither();
 			}
-			
+
 			final AbstractWither aw = aw_;
 
 			final Location l1 = Util.getComponentForArena(m, arena, "bounds.low");
@@ -162,11 +160,11 @@ public class IArena extends Arena {
 				f_ = true;
 			}
 
-			//currenttask = Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(m, new Runnable() {
+			// currenttask = Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(m, new Runnable() {
 			currenttask = Bukkit.getServer().getScheduler().runTaskTimer(m, new Runnable() {
 				@Override
 				public void run() {
-					if(wither != null){
+					if (wither != null) {
 						Vector v = wither.getNextPosition();
 						if (v != null) {
 							wither.setPosition(v.getX(), v.getY(), v.getZ());
@@ -174,7 +172,6 @@ public class IArena extends Arena {
 
 						aw.destroy(m, l1, l2, arena, length2);
 					}
-					
 				}
 			}, 3 + 20, 3);
 		}
@@ -229,7 +226,7 @@ public class IArena extends Arena {
 	}
 
 	public void stop(BukkitTask t, final String arena) {
-		if(t != null){
+		if (t != null) {
 			t.cancel();
 		}
 		if (m.mode1_6) {
@@ -301,7 +298,5 @@ public class IArena extends Arena {
 		}
 		return ret;
 	}
-
-	
 
 }

@@ -60,8 +60,8 @@ public class Main extends JavaPlugin implements Listener {
 	public static boolean mode1_7_8 = false;
 	public static boolean mode1_7_10 = false;
 
-	public static HashMap<String, String> pteam = new HashMap<String, String>();
-
+	public HashMap<String, Integer> ppoint = new HashMap<String, Integer>();
+	
 	public void onEnable() {
 		cmdhandler = new ICommandHandler();
 		m = this;
@@ -248,7 +248,41 @@ public class Main extends JavaPlugin implements Listener {
 						int index = getAllPoints(m, a.getName()).size() - 1;
 						if (Math.abs(p.getLocation().getBlockX() - getAllPoints(m, a.getName()).get(index).getBlockX()) < 3 && Math.abs(p.getLocation().getBlockZ() - getAllPoints(m, a.getName()).get(index).getBlockZ()) < 3) {
 							a.stop();
+							return;
 						}
+						
+						
+						// TODO Die behind mob (experimental)
+						if(!ppoint.containsKey(p.getName())){
+							ppoint.put(p.getName(), -1);
+						}
+						int i = ppoint.get(p.getName());
+						
+						int size = getAllPoints(m, a.getName()).size();
+						if(i < size){
+							if(i > -1){
+								int defaultdelta = 10;
+								
+								if(i+1 < size){
+									Location temp = getAllPoints(m, a.getName()).get(i+1);
+									
+									if (Math.abs(p.getLocation().getBlockX() - temp.getBlockX()) < defaultdelta && Math.abs(p.getLocation().getBlockZ() - temp.getBlockZ()) < defaultdelta) {
+										i++;
+										ppoint.put(p.getName(), i);
+									}
+								}
+							}else{
+								int defaultdelta = 5;
+								Location temp = getAllPoints(m, a.getName()).get(0);
+								if (Math.abs(p.getLocation().getBlockX() - temp.getBlockX()) < defaultdelta && Math.abs(p.getLocation().getBlockZ() - temp.getBlockZ()) < defaultdelta) {
+									i++;
+									ppoint.put(p.getName(), i);
+								}
+							}
+							
+						}
+
+						
 					}
 				}
 			}
