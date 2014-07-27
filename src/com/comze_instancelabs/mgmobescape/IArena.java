@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
@@ -19,6 +21,7 @@ import com.comze_instancelabs.mgmobescape.v1_7._R4.V1_7_10Dragon;
 import com.comze_instancelabs.mgmobescape.v1_7._R4.V1_7_10Wither;
 import com.comze_instancelabs.minigamesapi.Arena;
 import com.comze_instancelabs.minigamesapi.ArenaType;
+import com.comze_instancelabs.minigamesapi.MinigamesAPI;
 import com.comze_instancelabs.minigamesapi.util.Util;
 
 public class IArena extends Arena {
@@ -50,13 +53,13 @@ public class IArena extends Arena {
 		this.start();
 		super.start(tp);
 	}
-	
+
 	@Override
-	public void started(){
+	public void started() {
 		started_();
 	}
 
-	public void started_(){
+	public void started_() {
 		final String arena = this.getName();
 		final IArena a = this;
 		if (mobtype.equalsIgnoreCase("dragon")) {
@@ -72,9 +75,9 @@ public class IArena extends Arena {
 			} else {
 				ad_ = new V1_7Dragon();
 			}
-			
+
 			final AbstractDragon ad = ad_;
-			
+
 			final Location l1 = Util.getComponentForArena(m, arena, "bounds.low");
 			final Location l2 = Util.getComponentForArena(m, arena, "bounds.high");
 
@@ -92,20 +95,20 @@ public class IArena extends Arena {
 				length3 = l2.getBlockZ() - l1.getBlockZ();
 				f_ = true;
 			}
-			
+
 			currenttask = Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(m, new Runnable() {
 				@Override
 				public void run() {
 					Vector v = dragon.getNextPosition();
-					if(v != null && dragon != null){
-						//TODO add setPosition to each MEDragon class
+					if (v != null && dragon != null) {
+						// TODO add setPosition to each MEDragon class
 						dragon.setPosition(v.getX(), v.getY(), v.getZ());
 					}
 
 					ad.destroy(m, l1, l2, arena, length2);
 				}
 			}, 3 + 20, 3);
-			
+
 		} else {
 			AbstractWither aw = null;
 			if (m.mode1_6) {
@@ -121,7 +124,7 @@ public class IArena extends Arena {
 			}
 		}
 	}
-	
+
 	public void start() {
 		final String arena = this.getName();
 		final IArena a = this;
@@ -165,10 +168,10 @@ public class IArena extends Arena {
 	}
 
 	@Override
-	public void stop(){
+	public void stop() {
 		this.stop(currenttask, this.getName());
 	}
-	
+
 	public void stop(BukkitTask t, final String arena) {
 		if (m.mode1_6) {
 			if (mobtype.equalsIgnoreCase("dragon")) {
@@ -228,15 +231,28 @@ public class IArena extends Arena {
 		}
 	}
 
-	
-	//TODO Add functionality
-	
-	public Location getDragonSpawn(){
-		return null;
+	public Location getDragonSpawn() {
+		return Util.getComponentForArena(m, this.getName(), "mobspawn");
 	}
-	
-	public ArrayList<Vector> getDragonWayPoints(String arena){
-		return null;
+
+	public ArrayList<Vector> getDragonWayPoints(String arena) {
+		ArrayList<Vector> ret = new ArrayList<Vector>();
+		for (Location l : getAllPoints(m, arena)) {
+			ret.add(new Vector(l.getX(), l.getY(), l.getZ()));
+		}
+		return ret;
 	}
-	
+
+	public static ArrayList<Location> getAllPoints(JavaPlugin plugin, String arena) {
+		FileConfiguration config = MinigamesAPI.getAPI().pinstances.get(plugin).getArenasConfig().getConfig();
+		ArrayList<Location> ret = new ArrayList<Location>();
+		if (!config.isSet("arenas." + arena + ".flypoint")) {
+			return ret;
+		}
+		for (String spawn : config.getConfigurationSection("arenas." + arena + ".flypoint.").getKeys(false)) {
+			ret.add(Util.getComponentForArena(plugin, arena, "flypoint." + spawn));
+		}
+		return ret;
+	}
+
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -122,7 +123,49 @@ public class Main extends JavaPlugin implements Listener {
 	}
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		return cmdhandler.handleArgs(this, "mobescape", "/" + cmd.getName(), sender, args);
+		cmdhandler.handleArgs(this, "mobescape", "/" + cmd.getName(), sender, args);
+		if(args.length > 0){
+			String action = args[0];
+			if(action.equalsIgnoreCase("setmobspawn")){
+				if(args.length > 1){
+					String arena = args[1];
+					
+					if (!sender.hasPermission("mobescape.setup")) {
+						sender.sendMessage(pli.getMessagesConfig().no_perm);
+						return true;
+					}
+					if(sender instanceof Player){
+						Player p = (Player) sender;
+						if (args.length > 1) {
+							Util.saveComponentForArena(m, arena, "mobspawn", p.getLocation());
+							sender.sendMessage(pli.getMessagesConfig().successfully_set.replaceAll("<component>", "mobspawn"));
+						} else {
+							sender.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.RED + "-" + ChatColor.DARK_GRAY + "]" + ChatColor.GRAY + " Usage: " + cmd + " " + action + " <arena>");
+						}
+					}
+				}
+			}else if(action.equalsIgnoreCase("setflypoint")){
+				if(args.length > 1){
+					String arena = args[1];
+					
+					if (!sender.hasPermission("mobescape.setup")) {
+						sender.sendMessage(pli.getMessagesConfig().no_perm);
+						return true;
+					}
+					if(sender instanceof Player){
+						Player p = (Player) sender;
+						if (args.length > 1) {
+							int count = Util.getAllSpawns(m, arena).size();
+							Util.saveComponentForArena(m, arena, "flypoint.f" + Integer.toString(count), p.getLocation());
+							sender.sendMessage(pli.getMessagesConfig().successfully_set.replaceAll("<component>", "flypoint"));
+						} else {
+							sender.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.RED + "-" + ChatColor.DARK_GRAY + "]" + ChatColor.GRAY + " Usage: " + cmd + " " + action + " <arena>");
+						}
+					}
+				}
+			}
+		}
+		return true;
 	}
 
 	@EventHandler

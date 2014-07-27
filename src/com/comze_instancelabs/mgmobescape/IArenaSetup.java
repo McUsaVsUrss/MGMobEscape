@@ -2,6 +2,8 @@ package com.comze_instancelabs.mgmobescape;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comze_instancelabs.minigamesapi.Arena;
@@ -20,7 +22,6 @@ public class IArenaSetup extends ArenaSetup {
 			Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Arena " + arenaname + " appears to be invalid.");
 			return null;
 		}
-		// TODO arena saving (to file too)
 		PluginInstance pli = MinigamesAPI.getAPI().pinstances.get(plugin);
 		if (pli.getArenaByName(arenaname) != null) {
 			pli.removeArenaByName(arenaname);
