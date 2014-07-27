@@ -1,0 +1,14 @@
+name: MGMobEscape
+main: com.comze_instancelabs.mgmobescape.Main
+version: 1.3.5
+author: instancelabs
+softdepend: [Vault]
+commands:
+   dragonescape:
+      description: Main command
+      usage: /dragonescape <action>
+      aliases: [de]
+   escapethemob:
+      description: Main command
+      usage: /escapethemob <action>
+      aliases: [etm]
