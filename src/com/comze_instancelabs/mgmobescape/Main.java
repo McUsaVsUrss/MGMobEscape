@@ -49,6 +49,7 @@ public class Main extends JavaPlugin implements Listener {
 	ICommandHandler cmdhandler;
 
 	// TODO add into default config
+	// TODO Classes!
 
 	public int destroy_radius = 10;
 	public String dragon_name = "Dragon";
@@ -176,14 +177,23 @@ public class Main extends JavaPlugin implements Listener {
 						return true;
 					}
 					if (sender instanceof Player) {
-						Player p = (Player) sender;
-						ArenasConfig config = MinigamesAPI.getAPI().pinstances.get(m).getArenasConfig();
-						config.getConfig().set("arenas." + arena + ".mobtype", args[2]);
-						config.saveConfig();
-						sender.sendMessage(pli.getMessagesConfig().successfully_set.replaceAll("<component>", "mobtype"));
+						if(args[2].equalsIgnoreCase("dragon") || args[2].equalsIgnoreCase("wither")){
+							Player p = (Player) sender;
+							ArenasConfig config = pli.getArenasConfig();
+							config.getConfig().set("arenas." + arena + ".mobtype", args[2]);
+							config.saveConfig();
+							IArena a = (IArena) pli.getArenaByName(arena);
+							if(a != null){
+								a.mobtype = args[2];
+							}
+							sender.sendMessage(pli.getMessagesConfig().successfully_set.replaceAll("<component>", "mobtype"));
+						}else{
+							sender.sendMessage(ChatColor.AQUA + "Mobtypes: wither, dragon");
+						}
 					}
 				} else {
-					sender.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.RED + "-" + ChatColor.DARK_GRAY + "]" + ChatColor.GRAY + " Usage: " + cmd + " " + action + " <arena> <mobtype>");
+					sender.sendMessage(ChatColor.AQUA + "Mobtypes: wither, dragon");
+					sender.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.RED + "-" + ChatColor.DARK_GRAY + "]" + ChatColor.GRAY + " Usage: /" + cmd.getName() + " " + action + " <arena> <mobtype>");
 				}
 			}
 		}
