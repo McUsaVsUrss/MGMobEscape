@@ -32,8 +32,7 @@ public class V1_7_10Dragon implements AbstractDragon {
 
 	public static HashMap<String, MEDragon> dragons = new HashMap<String, MEDragon>();
 
-	
-	public static boolean registerEntities(){
+	public static boolean registerEntities() {
 		try {
 			Class entityTypeClass = EntityTypes.class;
 
@@ -65,8 +64,7 @@ public class V1_7_10Dragon implements AbstractDragon {
 			ex.printStackTrace();
 			return false;
 		}
-		
-		
+
 		try {
 			Class entityTypeClass = EntityTypes.class;
 
@@ -101,7 +99,7 @@ public class V1_7_10Dragon implements AbstractDragon {
 			return false;
 		}
 	}
-	
+
 	public void playBlockBreakParticles(final Location loc, final Material m, final Player... players) {
 		@SuppressWarnings("deprecation")
 		PacketPlayOutWorldEvent packet = new PacketPlayOutWorldEvent(2001, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), m.getId(), false);
@@ -109,30 +107,28 @@ public class V1_7_10Dragon implements AbstractDragon {
 			((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
 		}
 	}
-	
-	
+
 	public static MEDragon spawnEnderdragon(Main m, String arena, Location t) {
-		/*if(dragons.containsKey(arena)){
-			return dragons.get(arena);
-		}*/
+		/*
+		 * if(dragons.containsKey(arena)){ return dragons.get(arena); }
+		 */
 		m.getLogger().info("DRAGON SPAWNED " + arena + " " + t.toString());
 		Object w = ((CraftWorld) t.getWorld()).getHandle();
-		ArrayList<Vector> temp = ((IArena)MinigamesAPI.getAPI().pinstances.get(m).getArenaByName(arena)).getDragonWayPoints(arena);
-		if(temp == null){
+		ArrayList<Vector> temp = ((IArena) MinigamesAPI.getAPI().pinstances.get(m).getArenaByName(arena)).getDragonWayPoints(arena);
+		if (temp == null) {
 			m.getLogger().severe("You forgot to set any FlyPoints! You need to have min. 2 and one of them has to be at finish.");
 			return null;
 		}
-		MEDragon t_ = new MEDragon(m, arena, t, (net.minecraft.server.v1_7_R4.World) ((CraftWorld) t.getWorld()).getHandle(), temp);
+		final MEDragon t_ = new MEDragon(m, arena, t, (net.minecraft.server.v1_7_R4.World) w, temp);
 		((net.minecraft.server.v1_7_R4.World) w).addEntity(t_, CreatureSpawnEvent.SpawnReason.CUSTOM);
+		final IArena a = (IArena) m.pli.getArenaByName(arena);
 		t_.setCustomName(m.dragon_name);
 		dragons.put(arena, t_);
 		t_.move(0.1D, 0.1D, 0.1D);
 		return t_;
 	}
-	
-	
-	
-	public void removeEnderdragon(String arena){
+
+	public void removeEnderdragon(String arena) {
 		try {
 			removeEnderdragon(dragons.get(arena));
 			dragons.put(arena, null);
@@ -140,21 +136,19 @@ public class V1_7_10Dragon implements AbstractDragon {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 	public void stop(final Main m, BukkitTask t, final String arena) {
 		Tools t_ = new Tools();
 		t_.stop(m, t, arena, false, true, "dragon");
 	}
-	
-	
+
 	public void removeEnderdragon(MEDragon t) {
 		if (t != null) {
 			t.getBukkitEntity().remove();
 		}
 	}
-	
-	public Block[] getLoc(Main m, final Location l, String arena, int i, int j, Location l2){
+
+	public Block[] getLoc(Main m, final Location l, String arena, int i, int j, Location l2) {
 		Block[] b = new Block[4];
 		b[0] = l.getWorld().getBlockAt(new Location(l.getWorld(), dragons.get(arena).locX + (m.destroy_radius / 2) - i, dragons.get(arena).locY + j - 1, dragons.get(arena).locZ + 3));
 		b[1] = l.getWorld().getBlockAt(new Location(l.getWorld(), dragons.get(arena).locX + (m.destroy_radius / 2) - i, dragons.get(arena).locY + j - 1, dragons.get(arena).locZ - 3));
@@ -163,12 +157,12 @@ public class V1_7_10Dragon implements AbstractDragon {
 
 		return b;
 	}
-	
-	public static void destroyStatic(final Main m, final Location l, final Location l2, String arena, int length2){
+
+	public static void destroyStatic(final Main m, final Location l, final Location l2, String arena, int length2) {
 		Tools.destroy(m, l, l2, arena, length2, "dragon", false, true);
 	}
-	
-	public void destroy(final Main m, final Location l, final Location l2, String arena, int length2){
+
+	public void destroy(final Main m, final Location l, final Location l2, String arena, int length2) {
 		Tools.destroy(m, l, l2, arena, length2, "dragon", false, true);
 	}
 

@@ -218,6 +218,8 @@ public class IArena extends Arena {
 	@Override
 	public void stop() {
 		this.stop(currenttask, this.getName());
+		dragon = null;
+		wither = null;
 		super.stop();
 	}
 

@@ -44,7 +44,7 @@ import com.comze_instancelabs.minigamesapi.util.Validator;
 public class Main extends JavaPlugin implements Listener {
 
 	MinigamesAPI api = null;
-	PluginInstance pli = null;
+	public PluginInstance pli = null;
 	static Main m = null;
 	ICommandHandler cmdhandler;
 
