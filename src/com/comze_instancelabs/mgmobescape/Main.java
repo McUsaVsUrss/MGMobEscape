@@ -17,10 +17,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import com.comze_instancelabs.mgmobescape.v1_6.V1_6Dragon;
 import com.comze_instancelabs.mgmobescape.v1_7.V1_7Dragon;
@@ -30,7 +36,6 @@ import com.comze_instancelabs.mgmobescape.v1_7._R4.V1_7_10Dragon;
 import com.comze_instancelabs.minigamesapi.Arena;
 import com.comze_instancelabs.minigamesapi.ArenaSetup;
 import com.comze_instancelabs.minigamesapi.ArenaState;
-import com.comze_instancelabs.minigamesapi.ArenaType;
 import com.comze_instancelabs.minigamesapi.MinigamesAPI;
 import com.comze_instancelabs.minigamesapi.PluginInstance;
 import com.comze_instancelabs.minigamesapi.config.ArenasConfig;
@@ -49,7 +54,6 @@ public class Main extends JavaPlugin implements Listener {
 	ICommandHandler cmdhandler;
 
 	// TODO add into default config
-	// TODO Classes!
 
 	public int destroy_radius = 10;
 	public String dragon_name = "Dragon";
@@ -62,7 +66,7 @@ public class Main extends JavaPlugin implements Listener {
 	public static boolean mode1_7_10 = false;
 
 	public HashMap<String, Integer> ppoint = new HashMap<String, Integer>();
-	
+
 	public void onEnable() {
 		cmdhandler = new ICommandHandler();
 		m = this;
@@ -90,7 +94,6 @@ public class Main extends JavaPlugin implements Listener {
 		api = MinigamesAPI.getAPI().setupAPI(this, "mobescape", IArena.class, new ArenasConfig(this), new MessagesConfig(this), new IClassesConfig(this), new StatsConfig(this, false), new DefaultConfig(this, false), false);
 		PluginInstance pinstance = api.pinstances.get(this);
 		pinstance.addLoadedArenas(loadArenas(this, pinstance.getArenasConfig()));
-		Bukkit.getPluginManager().registerEvents(this, this);
 		pinstance.arenaSetup = new IArenaSetup();
 		pli = pinstance;
 	}
@@ -177,17 +180,17 @@ public class Main extends JavaPlugin implements Listener {
 						return true;
 					}
 					if (sender instanceof Player) {
-						if(args[2].equalsIgnoreCase("dragon") || args[2].equalsIgnoreCase("wither")){
+						if (args[2].equalsIgnoreCase("dragon") || args[2].equalsIgnoreCase("wither")) {
 							Player p = (Player) sender;
 							ArenasConfig config = pli.getArenasConfig();
 							config.getConfig().set("arenas." + arena + ".mobtype", args[2]);
 							config.saveConfig();
 							IArena a = (IArena) pli.getArenaByName(arena);
-							if(a != null){
+							if (a != null) {
 								a.mobtype = args[2];
 							}
 							sender.sendMessage(pli.getMessagesConfig().successfully_set.replaceAll("<component>", "mobtype"));
-						}else{
+						} else {
 							sender.sendMessage(ChatColor.AQUA + "Mobtypes: wither, dragon");
 						}
 					}
@@ -260,28 +263,27 @@ public class Main extends JavaPlugin implements Listener {
 							a.stop();
 							return;
 						}
-						
-						
+
 						// TODO Die behind mob (experimental)
-						if(!ppoint.containsKey(p.getName())){
+						if (!ppoint.containsKey(p.getName())) {
 							ppoint.put(p.getName(), -1);
 						}
 						int i = ppoint.get(p.getName());
-						
+
 						int size = getAllPoints(m, a.getName()).size();
-						if(i < size){
-							if(i > -1){
+						if (i < size) {
+							if (i > -1) {
 								int defaultdelta = 10;
-								
-								if(i+1 < size){
-									Location temp = getAllPoints(m, a.getName()).get(i+1);
-									
+
+								if (i + 1 < size) {
+									Location temp = getAllPoints(m, a.getName()).get(i + 1);
+
 									if (Math.abs(p.getLocation().getBlockX() - temp.getBlockX()) < defaultdelta && Math.abs(p.getLocation().getBlockZ() - temp.getBlockZ()) < defaultdelta) {
 										i++;
 										ppoint.put(p.getName(), i);
 									}
 								}
-							}else{
+							} else {
 								int defaultdelta = 5;
 								Location temp = getAllPoints(m, a.getName()).get(0);
 								if (Math.abs(p.getLocation().getBlockX() - temp.getBlockX()) < defaultdelta && Math.abs(p.getLocation().getBlockZ() - temp.getBlockZ()) < defaultdelta) {
@@ -289,10 +291,9 @@ public class Main extends JavaPlugin implements Listener {
 									ppoint.put(p.getName(), i);
 								}
 							}
-							
+
 						}
 
-						
 					}
 				}
 			}
@@ -314,5 +315,76 @@ public class Main extends JavaPlugin implements Listener {
 			ret.add(Util.getComponentForArena(plugin, arena, "flypoint." + spawn));
 		}
 		return ret;
+	}
+
+	@EventHandler
+	public void onProjectileLaunch(ProjectileLaunchEvent event) {
+		if (event.getEntity().getType() == EntityType.ENDER_PEARL) {
+			if (event.getEntity().getShooter() instanceof Player) {
+				final Player p = (Player) event.getEntity().getShooter();
+				if(pli.global_players.containsKey(p.getName())){
+					p.getInventory().removeItem(new ItemStack(Material.ENDER_PEARL, 2));
+					p.updateInventory();
+					for (final Entity t : p.getNearbyEntities(40, 40, 40)) {
+						if (t instanceof Player) {
+							if (t != p && pli.global_players.containsKey(((Player) t).getName())) {
+								Bukkit.getScheduler().runTaskLater(this, new Runnable() {
+									public void run() {
+										p.teleport(t);
+									}
+								}, 5L);
+							}
+						}
+					}
+					event.setCancelled(true);
+				}
+			}
+		}
+	}
+
+	@EventHandler
+	public void onPlayerInteract(PlayerInteractEvent event) {
+		final Player p = event.getPlayer();
+		if (pli.global_players.containsKey(p.getName())) {
+			if (!event.hasItem()) {
+				return;
+			}
+			if (event.getItem().getTypeId() == 258) {
+				p.getInventory().removeItem(new ItemStack(Material.IRON_AXE, 2));
+				p.updateInventory();
+				Vector direction = p.getLocation().getDirection().multiply(1.3D);
+				direction.setY(direction.getY() + 1.5);
+				p.setVelocity(direction);
+				// p.setVelocity(p.getVelocity().multiply(2D));
+				event.setCancelled(true);
+				p.getInventory().removeItem(new ItemStack(Material.IRON_AXE, 2));
+				p.updateInventory();
+				return;
+			} else if (event.getItem().getTypeId() == 368) {
+				p.getInventory().removeItem(new ItemStack(Material.ENDER_PEARL, 2));
+				p.updateInventory();
+				return;
+			} else if (event.getItem().getTypeId() == 46) {
+				p.getInventory().removeItem(new ItemStack(Material.TNT, 2));
+				p.updateInventory();
+				p.getLocation().getWorld().dropItemNaturally(p.getLocation().add(1, 3, 1), new ItemStack(Material.TNT));
+				event.setCancelled(true);
+				p.getInventory().removeItem(new ItemStack(Material.TNT, 2));
+				p.updateInventory();
+				return;
+			}
+		}
+
+	}
+
+	@EventHandler
+	public void onPlayerPickup(PlayerPickupItemEvent event) {
+		if (pli.global_players.containsKey(event.getPlayer().getName())) {
+			if (event.getItem().getItemStack().getType() == Material.TNT) {
+				event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 120, 1));
+				event.getItem().remove();
+				event.setCancelled(true);
+			}
+		}
 	}
 }
