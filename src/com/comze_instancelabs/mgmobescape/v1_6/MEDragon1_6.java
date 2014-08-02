@@ -96,7 +96,7 @@ public class MEDragon1_6 extends EntityEnderDragon implements AbstractMEDragon {
 		double tempy = this.locY;
 		double tempz = this.locZ;
 
-		if (((Math.abs((int) tempx - points.get(currentid).getX()) == 0) && (Math.abs((int) tempz - points.get(currentid).getZ()) <= 3)) || ((Math.abs((int) tempz - points.get(currentid).getZ()) == 0) && (Math.abs((int) tempx - points.get(currentid).getX()) <= 3) && (Math.abs((int) tempy - points.get(currentid).getY()) <= 5))) {
+		if (((Math.abs((int) tempx - points.get(currentid).getX()) <= 1) && (Math.abs((int) tempz - points.get(currentid).getZ()) <= 3) && (Math.abs((int) tempy - points.get(currentid).getY()) <= 5)) || ((Math.abs((int) tempz - points.get(currentid).getZ()) <= 0) && (Math.abs((int) tempx - points.get(currentid).getX()) <= 3) && (Math.abs((int) tempy - points.get(currentid).getY()) <= 5))) {
 			if (currentid < points.size() - 1) {
 				currentid += 1;
 			} else {

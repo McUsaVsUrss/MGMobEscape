@@ -259,7 +259,7 @@ public class Main extends JavaPlugin implements Listener {
 						}
 
 						int index = getAllPoints(m, a.getName()).size() - 1;
-						if (Math.abs(p.getLocation().getBlockX() - getAllPoints(m, a.getName()).get(index).getBlockX()) < 3 && Math.abs(p.getLocation().getBlockZ() - getAllPoints(m, a.getName()).get(index).getBlockZ()) < 3) {
+						if (Math.abs(p.getLocation().getBlockX() - getAllPoints(m, a.getName()).get(index).getBlockX()) < 3 && Math.abs(p.getLocation().getBlockZ() - getAllPoints(m, a.getName()).get(index).getBlockZ()) < 3 && Math.abs(p.getLocation().getBlockY() - getAllPoints(m, a.getName()).get(index).getBlockY()) < 3) {
 							a.stop();
 							return;
 						}
@@ -273,12 +273,12 @@ public class Main extends JavaPlugin implements Listener {
 						int size = getAllPoints(m, a.getName()).size();
 						if (i < size) {
 							if (i > -1) {
-								int defaultdelta = 10;
+								int defaultdelta = 5;
 
 								if (i + 1 < size) {
 									Location temp = getAllPoints(m, a.getName()).get(i + 1);
 
-									if (Math.abs(p.getLocation().getBlockX() - temp.getBlockX()) < defaultdelta && Math.abs(p.getLocation().getBlockZ() - temp.getBlockZ()) < defaultdelta) {
+									if (Math.abs(p.getLocation().getBlockX() - temp.getBlockX()) < defaultdelta && Math.abs(p.getLocation().getBlockZ() - temp.getBlockZ()) < defaultdelta && Math.abs(p.getLocation().getBlockY() - temp.getBlockY()) < defaultdelta * 2) {
 										i++;
 										ppoint.put(p.getName(), i);
 									}
@@ -291,7 +291,6 @@ public class Main extends JavaPlugin implements Listener {
 									ppoint.put(p.getName(), i);
 								}
 							}
-
 						}
 
 					}
