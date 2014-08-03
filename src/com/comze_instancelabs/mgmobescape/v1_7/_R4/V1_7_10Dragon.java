@@ -26,6 +26,8 @@ import com.comze_instancelabs.mgmobescape.AbstractDragon;
 import com.comze_instancelabs.mgmobescape.IArena;
 import com.comze_instancelabs.mgmobescape.Main;
 import com.comze_instancelabs.mgmobescape.mobtools.Tools;
+import com.comze_instancelabs.mgmobescape.v1_7._R4.MEDragon;
+import com.comze_instancelabs.mgmobescape.v1_7._R4.MEWither;
 import com.comze_instancelabs.minigamesapi.MinigamesAPI;
 
 public class V1_7_10Dragon implements AbstractDragon {
@@ -64,7 +66,8 @@ public class V1_7_10Dragon implements AbstractDragon {
 			ex.printStackTrace();
 			return false;
 		}
-
+		
+		
 		try {
 			Class entityTypeClass = EntityTypes.class;
 
@@ -112,6 +115,14 @@ public class V1_7_10Dragon implements AbstractDragon {
 		/*
 		 * if(dragons.containsKey(arena)){ return dragons.get(arena); }
 		 */
+		/*
+		 * m.getLogger().info("DRAGON SPAWNED " + arena + " " + t.toString()); Object w = ((CraftWorld) t.getWorld()).getHandle(); ArrayList<Vector>
+		 * temp = ((IArena) MinigamesAPI.getAPI().pinstances.get(m).getArenaByName(arena)).getDragonWayPoints(arena); if (temp == null) {
+		 * m.getLogger().severe("You forgot to set any FlyPoints! You need to have min. 2 and one of them has to be at finish."); return null; } final
+		 * MEDragon t_ = new MEDragon(m, arena, t, (net.minecraft.server.v1_7_R4.World) w, temp); ((net.minecraft.server.v1_7_R4.World)
+		 * w).addEntity(t_, CreatureSpawnEvent.SpawnReason.CUSTOM); final IArena a = (IArena) m.pli.getArenaByName(arena);
+		 * t_.setCustomName(m.dragon_name); dragons.put(arena, t_); t_.move(0.1D, 0.1D, 0.1D);
+		 */
 		m.getLogger().info("DRAGON SPAWNED " + arena + " " + t.toString());
 		Object w = ((CraftWorld) t.getWorld()).getHandle();
 		ArrayList<Vector> temp = ((IArena) MinigamesAPI.getAPI().pinstances.get(m).getArenaByName(arena)).getDragonWayPoints(arena);
@@ -119,12 +130,11 @@ public class V1_7_10Dragon implements AbstractDragon {
 			m.getLogger().severe("You forgot to set any FlyPoints! You need to have min. 2 and one of them has to be at finish.");
 			return null;
 		}
-		final MEDragon t_ = new MEDragon(m, arena, t, (net.minecraft.server.v1_7_R4.World) w, temp);
+		MEDragon t_ = new MEDragon(m, arena, t, (net.minecraft.server.v1_7_R4.World) ((CraftWorld) t.getWorld()).getHandle(), temp);
 		((net.minecraft.server.v1_7_R4.World) w).addEntity(t_, CreatureSpawnEvent.SpawnReason.CUSTOM);
-		final IArena a = (IArena) m.pli.getArenaByName(arena);
+		System.out.println(((net.minecraft.server.v1_7_R4.World) w).entityList.contains(t_));
 		t_.setCustomName(m.dragon_name);
 		dragons.put(arena, t_);
-		t_.move(0.1D, 0.1D, 0.1D);
 		return t_;
 	}
 
@@ -138,8 +148,10 @@ public class V1_7_10Dragon implements AbstractDragon {
 	}
 
 	public void stop(final Main m, BukkitTask t, final String arena) {
-		Tools t_ = new Tools();
-		t_.stop(m, t, arena, false, true, "dragon");
+		if (t != null) {
+			t.cancel();
+		}
+		removeEnderdragon(dragons.get(arena));
 	}
 
 	public void removeEnderdragon(MEDragon t) {

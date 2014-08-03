@@ -30,7 +30,7 @@ import com.comze_instancelabs.mgmobescape.v1_7._R4.V1_7_10Wither;
 public class Tools {
 
 	// the boolean parameters in this function are not used anymore
-	public void stop(final Main m, BukkitTask t, final String arena, boolean mode1_6, boolean mode1_7_5, final String type) {
+	public void stop(final Main m, BukkitTask t, final String arena, final String type) {
 
 		if(t != null){
 			t.cancel();

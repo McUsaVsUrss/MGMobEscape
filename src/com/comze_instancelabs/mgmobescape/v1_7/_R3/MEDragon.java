@@ -107,7 +107,7 @@ public class MEDragon extends EntityEnderDragon implements AbstractMEDragon {
 			ArrayList<String> temp = arena.getAllPlayers();
 			for (String p : temp) {
 				if (m.ppoint.containsKey(p)) {
-					System.out.println("p:" + m.ppoint.get(p) + " d:" + currentid);
+					//System.out.println("p:" + m.ppoint.get(p) + " d:" + currentid);
 					if (m.ppoint.get(p) < currentid - 1) {
 						// player fell behind mob
 						arena.spectate(p);

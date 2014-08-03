@@ -27,11 +27,13 @@ import com.comze_instancelabs.minigamesapi.util.Util;
 public class IArena extends Arena {
 
 	public static Main m;
-	public String mobtype;
+	public String mobtype = "dragon";
 	BukkitTask currenttask;
 
-	AbstractMEDragon dragon = null;
-	AbstractMEWither wither = null;
+	AbstractMEDragon dragon;
+	AbstractMEWither wither;
+	AbstractDragon ad;
+	AbstractWither aw;
 
 	public Location lowbounds = null;
 	public Location highbounds = null;
@@ -74,18 +76,47 @@ public class IArena extends Arena {
 		final String arena = this.getName();
 		final IArena a = this;
 		if (mobtype.equalsIgnoreCase("dragon")) {
-			AbstractDragon ad_ = null;
 			if (m.mode1_6) {
-				ad_ = new V1_6Dragon();
+				ad = new V1_6Dragon();
+				dragon = V1_6Dragon.spawnEnderdragon1_6(m, arena, a.getDragonSpawn());
 			} else if (m.mode1_7_5) {
-				ad_ = new V1_7_5Dragon();
+				ad = new V1_7_5Dragon();
+				dragon = V1_7_5Dragon.spawnEnderdragon(m, arena, a.getDragonSpawn());
 			} else if (m.mode1_7_8) {
-				ad_ = new V1_7_8Dragon();
+				ad = new V1_7_8Dragon();
+				dragon = V1_7_8Dragon.spawnEnderdragon(m, arena, a.getDragonSpawn());
 			} else if (m.mode1_7_10) {
-				ad_ = new V1_7_10Dragon();
+				ad = new V1_7_10Dragon();
+				dragon = V1_7_10Dragon.spawnEnderdragon(m, arena, a.getDragonSpawn());
 			} else {
-				ad_ = new V1_7Dragon();
+				ad = new V1_7Dragon();
+				dragon = V1_7Dragon.spawnEnderdragon(m, arena, a.getDragonSpawn());
 			}
+		} else {
+			if (m.mode1_6) {
+				aw = new V1_6Wither();
+				wither = V1_6Wither.spawnWither1_6(m, arena, a.getDragonSpawn());
+			} else if (m.mode1_7_5) {
+				aw = new V1_7_5Wither();
+				wither = V1_7_5Wither.spawnWither(m, arena, a.getDragonSpawn());
+			} else if (m.mode1_7_8) {
+				aw = new V1_7_8Wither();
+				wither = V1_7_8Wither.spawnWither(m, arena, a.getDragonSpawn());
+			} else if (m.mode1_7_10) {
+				aw = new V1_7_10Wither();
+				wither = V1_7_10Wither.spawnWither(m, arena, a.getDragonSpawn());
+			} else {
+				aw = new V1_7Wither();
+				wither = V1_7Wither.spawnWither(m, arena, a.getDragonSpawn());
+			}
+		}
+
+		if (mobtype.equalsIgnoreCase("dragon")) {
+			AbstractDragon ad_ = this.ad;
+			/*
+			 * if (m.mode1_6) { ad_ = new V1_6Dragon(); } else if (m.mode1_7_5) { ad_ = new V1_7_5Dragon(); } else if (m.mode1_7_8) { ad_ = new
+			 * V1_7_8Dragon(); } else if (m.mode1_7_10) { ad_ = new V1_7_10Dragon(); } else { ad_ = new V1_7Dragon(); }
+			 */
 
 			final AbstractDragon ad = ad_;
 
@@ -123,18 +154,11 @@ public class IArena extends Arena {
 			}, 3 + 20, 3);
 
 		} else {
-			AbstractWither aw_ = null;
-			if (m.mode1_6) {
-				aw_ = new V1_6Wither();
-			} else if (m.mode1_7_5) {
-				aw_ = new V1_7_5Wither();
-			} else if (m.mode1_7_8) {
-				aw_ = new V1_7_8Wither();
-			} else if (m.mode1_7_10) {
-				aw_ = new V1_7_10Wither();
-			} else {
-				aw_ = new V1_7Wither();
-			}
+			AbstractWither aw_ = this.aw;
+			/*
+			 * if (m.mode1_6) { aw_ = new V1_6Wither(); } else if (m.mode1_7_5) { aw_ = new V1_7_5Wither(); } else if (m.mode1_7_8) { aw_ = new
+			 * V1_7_8Wither(); } else if (m.mode1_7_10) { aw_ = new V1_7_10Wither(); } else { aw_ = new V1_7Wither(); }
+			 */
 
 			final AbstractWither aw = aw_;
 
@@ -174,52 +198,14 @@ public class IArena extends Arena {
 	}
 
 	public void start() {
-		final String arena = this.getName();
-		final IArena a = this;
-		if (mobtype.equalsIgnoreCase("dragon")) {
-			AbstractDragon ad = null;
-			if (m.mode1_6) {
-				ad = new V1_6Dragon();
-				dragon = V1_6Dragon.spawnEnderdragon1_6(m, arena, a.getDragonSpawn());
-			} else if (m.mode1_7_5) {
-				ad = new V1_7_5Dragon();
-				dragon = V1_7_5Dragon.spawnEnderdragon(m, arena, a.getDragonSpawn());
-			} else if (m.mode1_7_8) {
-				ad = new V1_7_8Dragon();
-				dragon = V1_7_8Dragon.spawnEnderdragon(m, arena, a.getDragonSpawn());
-			} else if (m.mode1_7_10) {
-				ad = new V1_7_10Dragon();
-				dragon = V1_7_10Dragon.spawnEnderdragon(m, arena, a.getDragonSpawn());
-			} else {
-				ad = new V1_7Dragon();
-				dragon = V1_7Dragon.spawnEnderdragon(m, arena, a.getDragonSpawn());
-			}
-		} else {
-			AbstractWither aw = null;
-			if (m.mode1_6) {
-				aw = new V1_6Wither();
-				wither = V1_6Wither.spawnWither1_6(m, arena, a.getDragonSpawn());
-			} else if (m.mode1_7_5) {
-				aw = new V1_7_5Wither();
-				wither = V1_7_5Wither.spawnWither(m, arena, a.getDragonSpawn());
-			} else if (m.mode1_7_8) {
-				aw = new V1_7_8Wither();
-				wither = V1_7_8Wither.spawnWither(m, arena, a.getDragonSpawn());
-			} else if (m.mode1_7_10) {
-				aw = new V1_7_10Wither();
-				wither = V1_7_10Wither.spawnWither(m, arena, a.getDragonSpawn());
-			} else {
-				aw = new V1_7Wither();
-				wither = V1_7Wither.spawnWither(m, arena, a.getDragonSpawn());
-			}
-		}
+
 	}
 
 	@Override
 	public void stop() {
 		this.stop(currenttask, this.getName());
-		//dragon = null;
-		//wither = null;
+		dragon = null;
+		wither = null;
 		super.stop();
 	}
 
@@ -227,62 +213,52 @@ public class IArena extends Arena {
 		if (t != null) {
 			t.cancel();
 		}
-		if (m.mode1_6) {
-			if (mobtype.equalsIgnoreCase("dragon")) {
-				V1_6Dragon v = new V1_6Dragon();
-				v.stop(m, t, arena);
-			} else if (mobtype.equalsIgnoreCase("wither")) {
-				V1_6Wither v = new V1_6Wither();
-				v.stop(m, t, arena);
+		try {
+			if (m.mode1_6) {
+				if (mobtype.equalsIgnoreCase("dragon")) {
+					ad.stop(m, t, arena);
+				} else if (mobtype.equalsIgnoreCase("wither")) {
+					aw.stop(m, t, arena);
+				} else {
+					ad.stop(m, t, arena);
+				}
+			} else if (m.mode1_7_5) {
+				if (mobtype.equalsIgnoreCase("dragon")) {
+					ad.stop(m, t, arena);
+				} else if (mobtype.equalsIgnoreCase("wither")) {
+					aw.stop(m, t, arena);
+				} else {
+					ad.stop(m, t, arena);
+				}
+			} else if (m.mode1_7_8) {
+				if (mobtype.equalsIgnoreCase("dragon")) {
+					ad.stop(m, t, arena);
+				} else if (mobtype.equalsIgnoreCase("wither")) {
+					aw.stop(m, t, arena);
+				} else {
+					ad.stop(m, t, arena);
+				}
+			} else if (m.mode1_7_10) {
+				if (mobtype.equalsIgnoreCase("dragon")) {
+					ad.stop(m, t, arena);
+				} else if (mobtype.equalsIgnoreCase("wither")) {
+					aw.stop(m, t, arena);
+				} else {
+					ad.stop(m, t, arena);
+				}
 			} else {
-				V1_6Dragon v = new V1_6Dragon();
-				v.stop(m, t, arena);
+				if (mobtype.equalsIgnoreCase("dragon")) {
+					ad.stop(m, t, arena);
+				} else if (mobtype.equalsIgnoreCase("wither")) {
+					aw.stop(m, t, arena);
+				} else {
+					ad.stop(m, t, arena);
+				}
 			}
-		} else if (m.mode1_7_5) {
-			if (mobtype.equalsIgnoreCase("dragon")) {
-				V1_7_5Dragon v = new V1_7_5Dragon();
-				v.stop(m, t, arena);
-			} else if (mobtype.equalsIgnoreCase("wither")) {
-				V1_7_5Wither v = new V1_7_5Wither();
-				v.stop(m, t, arena);
-			} else {
-				V1_7_5Dragon v = new V1_7_5Dragon();
-				v.stop(m, t, arena);
-			}
-		} else if (m.mode1_7_8) {
-			if (mobtype.equalsIgnoreCase("dragon")) {
-				V1_7_8Dragon v = new V1_7_8Dragon();
-				v.stop(m, t, arena);
-			} else if (mobtype.equalsIgnoreCase("wither")) {
-				V1_7_8Wither v = new V1_7_8Wither();
-				v.stop(m, t, arena);
-			} else {
-				V1_7_8Dragon v = new V1_7_8Dragon();
-				v.stop(m, t, arena);
-			}
-		} else if (m.mode1_7_10) {
-			if (mobtype.equalsIgnoreCase("dragon")) {
-				V1_7_10Dragon v = new V1_7_10Dragon();
-				v.stop(m, t, arena);
-			} else if (mobtype.equalsIgnoreCase("wither")) {
-				V1_7_10Wither v = new V1_7_10Wither();
-				v.stop(m, t, arena);
-			} else {
-				V1_7_10Dragon v = new V1_7_10Dragon();
-				v.stop(m, t, arena);
-			}
-		} else {
-			if (mobtype.equalsIgnoreCase("dragon")) {
-				V1_7Dragon v = new V1_7Dragon();
-				v.stop(m, t, arena);
-			} else if (mobtype.equalsIgnoreCase("wither")) {
-				V1_7Wither v = new V1_7Wither();
-				v.stop(m, t, arena);
-			} else {
-				V1_7Dragon v = new V1_7Dragon();
-				v.stop(m, t, arena);
-			}
+		} catch (Exception e) {
+
 		}
+
 	}
 
 	public Location getDragonSpawn() {

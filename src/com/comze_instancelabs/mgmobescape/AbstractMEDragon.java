@@ -1,5 +1,6 @@
 package com.comze_instancelabs.mgmobescape;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
 
 public interface AbstractMEDragon {

@@ -142,8 +142,10 @@ public class V1_7_5Dragon implements AbstractDragon {
 	
 	
 	public void stop(final Main m, BukkitTask t, final String arena) {
-		Tools t_ = new Tools();
-		t_.stop(m, t, arena, false, true, "dragon");
+		if (t != null) {
+			t.cancel();
+		}
+		removeEnderdragon(dragons.get(arena));
 	}
 	
 	

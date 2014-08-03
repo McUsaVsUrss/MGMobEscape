@@ -44,7 +44,7 @@ public class V1_7_10Wither implements AbstractWither {
 		 */
 		m.getLogger().info("WITHER SPAWNED " + arena + " " + t.toString());
 		Object w = ((CraftWorld) t.getWorld()).getHandle();
-		ArrayList<Vector> temp = ((IArena)MinigamesAPI.getAPI().pinstances.get(m).getArenaByName(arena)).getDragonWayPoints(arena);
+		ArrayList<Vector> temp = ((IArena) MinigamesAPI.getAPI().pinstances.get(m).getArenaByName(arena)).getDragonWayPoints(arena);
 		if (temp == null) {
 			m.getLogger().severe("You forgot to set any FlyPoints! You need to have min. 2 and one of them has to be at finish.");
 			return null;
@@ -56,7 +56,6 @@ public class V1_7_10Wither implements AbstractWither {
 		t_.move(0.1D, 0.1D, 0.1D);
 		return t_;
 	}
-
 
 	public void removeWither(String arena) {
 		try {
@@ -78,8 +77,10 @@ public class V1_7_10Wither implements AbstractWither {
 	}
 
 	public void stop(final Main m, BukkitTask t, final String arena) {
-		Tools t_ = new Tools();
-		t_.stop(m, t, arena, false, true, "wither");
+		if (t != null) {
+			t.cancel();
+		}
+		removeWither(wither.get(arena));
 	}
 
 	public void removeWither(MEWither t) {

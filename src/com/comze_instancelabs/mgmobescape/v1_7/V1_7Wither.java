@@ -71,8 +71,10 @@ public class V1_7Wither implements AbstractWither {
 	}
 	
 	public void stop(final Main m, BukkitTask t, final String arena) {
-		Tools t_ = new Tools();
-		t_.stop(m, t, arena, false, false, "wither");
+		if (t != null) {
+			t.cancel();
+		}
+		removeWither(wither.get(arena));
 	}
 	
 	
