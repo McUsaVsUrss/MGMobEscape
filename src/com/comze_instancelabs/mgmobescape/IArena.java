@@ -273,4 +273,13 @@ public class IArena extends Arena {
 		return ret;
 	}
 
+	@Override
+	public void reset() {
+		final Arena a = this;
+		Bukkit.getScheduler().runTask(m, new Runnable() {
+			public void run() {
+				Util.loadArenaFromFileSYNC(m, a);
+			}
+		});
+	}
 }
