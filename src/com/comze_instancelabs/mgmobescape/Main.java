@@ -236,10 +236,12 @@ public class Main extends JavaPlugin implements Listener {
 		if (event.getEntityType() == EntityType.FALLING_BLOCK) {
 			for (Arena a : MinigamesAPI.getAPI().pinstances.get(m).getArenas()) {
 				if (Validator.isArenaValid(m, a)) {
-					Cuboid c = new Cuboid(Util.getComponentForArena(m, a.getName(), "bounds.low"), Util.getComponentForArena(m, a.getName(), "bounds.high"));
-					if (c.containsLocWithoutY(event.getBlock().getLocation())) {
+					//Cuboid c = new Cuboid(Util.getComponentForArena(m, a.getName(), "bounds.low"), Util.getComponentForArena(m, a.getName(), "bounds.high"));
+					//if (c.containsLocWithoutY(event.getBlock().getLocation())) {
+					if(event.getEntity().hasMetadata("1337")){
 						event.setCancelled(true);
 					}
+					//}
 				}
 			}
 		}

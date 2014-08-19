@@ -10,6 +10,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
@@ -113,8 +114,8 @@ public class Tools {
 									ad.playBlockBreakParticles(b.getLocation(), b.getType());
 									if (b.getType() != Material.WATER && b.getType() != Material.LAVA && m.spawn_falling_blocks) {
 										FallingBlock fb = l.getWorld().spawnFallingBlock(b.getLocation(), b.getType(), b.getData());
-										fb.setMetadata("vortex", new FixedMetadataValue(m, "protected"));
-										fb.setVelocity(new Vector(0, 0.4, 0));
+										fb.setMetadata("1337", new FixedMetadataValue(m, "true"));
+										fb.setVelocity(new Vector(Math.random() * 0.4, 0.4, Math.random() * 0.4));
 									}
 									b.setType(Material.AIR);
 								}
@@ -151,8 +152,8 @@ public class Tools {
 									aw.playBlockBreakParticles(b.getLocation(), b.getType());
 									if (b.getType() != Material.WATER && b.getType() != Material.LAVA && m.spawn_falling_blocks) {
 										FallingBlock fb = l.getWorld().spawnFallingBlock(b.getLocation(), b.getType(), b.getData());
-										fb.setMetadata("vortex", new FixedMetadataValue(m, "protected"));
-										fb.setVelocity(new Vector(0, 0.4, 0));
+										fb.setMetadata("1337", new FixedMetadataValue(m, "true"));
+										fb.setVelocity(new Vector(Math.random() * 0.4, 0.4, Math.random() * 0.4));
 									}
 									b.setType(Material.AIR);
 								}
