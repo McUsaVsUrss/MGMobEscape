@@ -150,7 +150,7 @@ public class Main extends JavaPlugin implements Listener {
 							Util.saveComponentForArena(m, arena, "mobspawn", p.getLocation());
 							sender.sendMessage(pli.getMessagesConfig().successfully_set.replaceAll("<component>", "mobspawn"));
 						} else {
-							sender.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.RED + "-" + ChatColor.DARK_GRAY + "]" + ChatColor.GRAY + " Usage: " + cmd + " " + action + " <arena>");
+							sender.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.RED + "-" + ChatColor.DARK_GRAY + "]" + ChatColor.GRAY + " Usage: " + cmd.getName() + " " + action + " <arena>");
 						}
 					}
 				}
@@ -169,7 +169,7 @@ public class Main extends JavaPlugin implements Listener {
 						sender.sendMessage(pli.getMessagesConfig().successfully_set.replaceAll("<component>", "flypoint " + Integer.toString(count)));
 					}
 				} else {
-					sender.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.RED + "-" + ChatColor.DARK_GRAY + "]" + ChatColor.GRAY + " Usage: " + cmd + " " + action + " <arena>");
+					sender.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.RED + "-" + ChatColor.DARK_GRAY + "]" + ChatColor.GRAY + " Usage: " + cmd.getName() + " " + action + " <arena>");
 				}
 			} else if (action.equalsIgnoreCase("setmobtype")) {
 				if (args.length > 2) {
