@@ -13,10 +13,12 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -385,6 +387,29 @@ public class Main extends JavaPlugin implements Listener {
 				event.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 120, 1));
 				event.getItem().remove();
 				event.setCancelled(true);
+			}
+		}
+	}
+	
+	@EventHandler
+	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+		if (event.getEntity() instanceof Player) {
+			Player p = (Player) event.getEntity();
+			Player attacker;
+			if (event.getDamager() instanceof Projectile) {
+				Projectile projectile = (Projectile) event.getDamager();
+				attacker = (Player) projectile.getShooter();
+			} else if (event.getDamager() instanceof Player) {
+				attacker = (Player) event.getDamager();
+			} else {
+				return;
+			}
+
+			if (pli.global_players.containsKey(p.getName()) && pli.global_players.containsKey(attacker.getName())) {
+				Arena a = (Arena) pli.global_players.get(p.getName());
+				if (a.getArenaState() == ArenaState.STARTING) {
+					event.setCancelled(true);
+				}
 			}
 		}
 	}

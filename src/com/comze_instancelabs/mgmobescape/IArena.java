@@ -50,20 +50,9 @@ public class IArena extends Arena {
 	}
 
 	@Override
-	public void joinPlayerLobby(String playername) {
-		super.joinPlayerLobby(playername);
-	}
-
-	@Override
-	public void spectate(String playername) {
-		super.spectate(playername);
-	}
-
-	@Override
 	public void start(boolean tp) {
 		this.lowbounds = Util.getComponentForArena(m, this.getName(), "bounds.low");
 		this.highbounds = Util.getComponentForArena(m, this.getName(), "bounds.high");
-		this.start();
 		super.start(tp);
 	}
 
@@ -195,10 +184,6 @@ public class IArena extends Arena {
 				}
 			}, 3 + 20, 3);
 		}
-	}
-
-	public void start() {
-
 	}
 
 	@Override
