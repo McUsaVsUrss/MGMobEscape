@@ -1,7 +1,6 @@
 package com.comze_instancelabs.mgmobescape;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -21,12 +20,14 @@ import com.comze_instancelabs.mgmobescape.v1_7._R4.V1_7_10Wither;
 import com.comze_instancelabs.minigamesapi.Arena;
 import com.comze_instancelabs.minigamesapi.ArenaType;
 import com.comze_instancelabs.minigamesapi.MinigamesAPI;
+import com.comze_instancelabs.minigamesapi.PluginInstance;
 import com.comze_instancelabs.minigamesapi.config.ArenasConfig;
 import com.comze_instancelabs.minigamesapi.util.Util;
 
 public class IArena extends Arena {
 
 	public static Main m;
+	PluginInstance pli;
 	public String mobtype = "dragon";
 	BukkitTask currenttask;
 
@@ -47,6 +48,7 @@ public class IArena extends Arena {
 			this.mobtype = "dragon";
 		}
 		this.m = m;
+		this.pli = MinigamesAPI.getAPI().pinstances.get(m);
 	}
 
 	@Override
@@ -138,6 +140,8 @@ public class IArena extends Arena {
 						}
 
 						ad.destroy(m, l1, l2, arena, length2);
+
+						m.scoreboard.updateScoreboard(a);
 					}
 				}
 			}, 3 + 20, 3);
@@ -256,6 +260,10 @@ public class IArena extends Arena {
 			ret.add(new Vector(l.getX(), l.getY(), l.getZ()));
 		}
 		return ret;
+	}
+
+	public Location getLastDragonWaypointLoc(String arena) {
+		return m.getAllPoints(m, arena).get(m.getAllPoints(m, arena).size() - 1);
 	}
 
 	@Override

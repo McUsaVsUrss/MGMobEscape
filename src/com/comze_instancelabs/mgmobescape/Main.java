@@ -44,7 +44,6 @@ import com.comze_instancelabs.minigamesapi.config.ArenasConfig;
 import com.comze_instancelabs.minigamesapi.config.DefaultConfig;
 import com.comze_instancelabs.minigamesapi.config.MessagesConfig;
 import com.comze_instancelabs.minigamesapi.config.StatsConfig;
-import com.comze_instancelabs.minigamesapi.util.Cuboid;
 import com.comze_instancelabs.minigamesapi.util.Util;
 import com.comze_instancelabs.minigamesapi.util.Validator;
 
@@ -54,6 +53,7 @@ public class Main extends JavaPlugin implements Listener {
 	public PluginInstance pli = null;
 	static Main m = null;
 	ICommandHandler cmdhandler;
+	IArenaScoreboard scoreboard;
 
 	// TODO add into default config
 
@@ -97,6 +97,9 @@ public class Main extends JavaPlugin implements Listener {
 		PluginInstance pinstance = api.pinstances.get(this);
 		pinstance.addLoadedArenas(loadArenas(this, pinstance.getArenasConfig()));
 		pinstance.arenaSetup = new IArenaSetup();
+		IArenaScoreboard score = new IArenaScoreboard(this);
+		pinstance.scoreboardManager = score;
+		scoreboard = score;
 		pli = pinstance;
 	}
 
@@ -238,12 +241,13 @@ public class Main extends JavaPlugin implements Listener {
 		if (event.getEntityType() == EntityType.FALLING_BLOCK) {
 			for (Arena a : MinigamesAPI.getAPI().pinstances.get(m).getArenas()) {
 				if (Validator.isArenaValid(m, a)) {
-					//Cuboid c = new Cuboid(Util.getComponentForArena(m, a.getName(), "bounds.low"), Util.getComponentForArena(m, a.getName(), "bounds.high"));
-					//if (c.containsLocWithoutY(event.getBlock().getLocation())) {
-					if(event.getEntity().hasMetadata("1337")){
+					// Cuboid c = new Cuboid(Util.getComponentForArena(m, a.getName(), "bounds.low"), Util.getComponentForArena(m, a.getName(),
+					// "bounds.high"));
+					// if (c.containsLocWithoutY(event.getBlock().getLocation())) {
+					if (event.getEntity().hasMetadata("1337")) {
 						event.setCancelled(true);
 					}
-					//}
+					// }
 				}
 			}
 		}
@@ -325,7 +329,7 @@ public class Main extends JavaPlugin implements Listener {
 		if (event.getEntity().getType() == EntityType.ENDER_PEARL) {
 			if (event.getEntity().getShooter() instanceof Player) {
 				final Player p = (Player) event.getEntity().getShooter();
-				if(pli.global_players.containsKey(p.getName())){
+				if (pli.global_players.containsKey(p.getName())) {
 					p.getInventory().removeItem(new ItemStack(Material.ENDER_PEARL, 2));
 					p.updateInventory();
 					for (final Entity t : p.getNearbyEntities(40, 40, 40)) {
@@ -390,7 +394,7 @@ public class Main extends JavaPlugin implements Listener {
 			}
 		}
 	}
-	
+
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
 		if (event.getEntity() instanceof Player) {
