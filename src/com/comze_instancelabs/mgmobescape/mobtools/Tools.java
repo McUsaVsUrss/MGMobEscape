@@ -16,6 +16,7 @@ import org.bukkit.util.Vector;
 
 import com.comze_instancelabs.mgmobescape.AbstractDragon;
 import com.comze_instancelabs.mgmobescape.AbstractWither;
+import com.comze_instancelabs.mgmobescape.IArena;
 import com.comze_instancelabs.mgmobescape.Main;
 import com.comze_instancelabs.mgmobescape.v1_6.V1_6Dragon;
 import com.comze_instancelabs.mgmobescape.v1_6.V1_6Wither;
@@ -33,12 +34,12 @@ public class Tools {
 	// the boolean parameters in this function are not used anymore
 	public void stop(final Main m, BukkitTask t, final String arena, final String type) {
 
-		if(t != null){
+		if (t != null) {
 			t.cancel();
 		}
 
-		Bukkit.getScheduler().runTaskLater(m, new Runnable(){
-			public void run(){
+		Bukkit.getScheduler().runTaskLater(m, new Runnable() {
+			public void run() {
 				if (type.equalsIgnoreCase("dragon")) {
 					if (m.mode1_6) {
 						V1_6Dragon v = new V1_6Dragon();
@@ -82,6 +83,7 @@ public class Tools {
 	// the boolean parameters in this function are not used anymore
 	public static void destroy(final Main m, final Location l, final Location l2, String arena, int length2, String type, boolean mode1_6, boolean mode1_7_5) {
 		// south
+		final IArena a = (IArena) m.pli.getArenaByName(arena);
 		for (int i = 0; i < m.destroy_radius; i++) { // length1
 			for (int j = 0; j < m.destroy_radius; j++) {
 				if (type.equalsIgnoreCase("dragon")) {
@@ -117,6 +119,7 @@ public class Tools {
 										fb.setMetadata("1337", new FixedMetadataValue(m, "true"));
 										fb.setVelocity(new Vector(Math.random() * 0.4, 0.4, Math.random() * 0.4));
 									}
+									a.getSmartReset().addChanged(b, b.getType().equals(Material.CHEST));
 									b.setType(Material.AIR);
 								}
 							}
@@ -155,6 +158,7 @@ public class Tools {
 										fb.setMetadata("1337", new FixedMetadataValue(m, "true"));
 										fb.setVelocity(new Vector(Math.random() * 0.4, 0.4, Math.random() * 0.4));
 									}
+									a.getSmartReset().addChanged(b, b.getType().equals(Material.CHEST));
 									b.setType(Material.AIR);
 								}
 							}

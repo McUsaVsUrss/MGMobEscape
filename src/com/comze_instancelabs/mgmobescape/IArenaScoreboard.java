@@ -104,6 +104,14 @@ public class IArenaScoreboard extends ArenaScoreboard {
 		Scoreboard sc = manager.getNewScoreboard();
 		sc.clearSlot(DisplaySlot.SIDEBAR);
 		p.setScoreboard(sc);
+		if (currentscore.containsKey(p.getName())) {
+			currentscore.remove(p.getName());
+		}
+		if (ascore.containsKey(arena)) {
+			ascore.remove(arena);
+		}
+		if (aobjective.containsKey(arena)) {
+			aobjective.remove(arena);
+		}
 	}
-
 }

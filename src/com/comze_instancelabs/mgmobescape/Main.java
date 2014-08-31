@@ -223,16 +223,7 @@ public class Main extends JavaPlugin implements Listener {
 	public void onBreak(BlockBreakEvent event) {
 		final Player p = event.getPlayer();
 		if (pli.global_players.containsKey(p.getName())) {
-			IArena a = (IArena) pli.global_players.get(p.getName());
-			if (a.getArenaState() == ArenaState.INGAME) {
-				if (event.getBlock().getType() == Material.STAINED_GLASS) {
-					byte data = event.getBlock().getData();
-					p.getInventory().addItem(new ItemStack(Material.STAINED_GLASS, 1, data));
-					p.updateInventory();
-					event.getBlock().setType(Material.AIR);
-					event.setCancelled(true);
-				}
-			}
+			event.setCancelled(true);
 		}
 	}
 
@@ -374,7 +365,7 @@ public class Main extends JavaPlugin implements Listener {
 			} else if (event.getItem().getTypeId() == 46) {
 				p.getInventory().removeItem(new ItemStack(Material.TNT, 2));
 				p.updateInventory();
-				p.getLocation().getWorld().dropItemNaturally(p.getLocation().add(1, 3, 1), new ItemStack(Material.TNT));
+				p.getLocation().getWorld().dropItemNaturally(p.getLocation().add(0, 3, 0), new ItemStack(Material.TNT)).setVelocity(new Vector(0, 1, 0));
 				event.setCancelled(true);
 				p.getInventory().removeItem(new ItemStack(Material.TNT, 2));
 				p.updateInventory();
