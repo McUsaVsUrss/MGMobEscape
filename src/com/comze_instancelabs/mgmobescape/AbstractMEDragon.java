@@ -9,4 +9,5 @@ public interface AbstractMEDragon {
 	
 	public void setPosition(double x, double y, double z);
 	
+	public void setYawPitch(float yaw, float pitch);
 }

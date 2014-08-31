@@ -1,20 +1,17 @@
 package com.comze_instancelabs.mgmobescape.mobtools;
 
-import java.util.ArrayList;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
 import org.bukkit.entity.FallingBlock;
-import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import com.comze_instancelabs.mgmobescape.AbstractDragon;
+import com.comze_instancelabs.mgmobescape.AbstractMEDragon;
+import com.comze_instancelabs.mgmobescape.AbstractMEWither;
 import com.comze_instancelabs.mgmobescape.AbstractWither;
 import com.comze_instancelabs.mgmobescape.IArena;
 import com.comze_instancelabs.mgmobescape.Main;
@@ -170,4 +167,61 @@ public class Tools {
 		}
 
 	}
+
+	public static void setYawPitchDragon(AbstractMEDragon ad, Vector start, Vector l) {
+		double dx = l.getX() - start.getX();
+		double dy = l.getY() - start.getY();
+		double dz = l.getZ() - start.getZ();
+
+		float yaw = 0F;
+		float pitch = 0F;
+
+		if (dx != 0) {
+			if (dx < 0) {
+				yaw = (float) (1.5 * Math.PI);
+			} else {
+				yaw = (float) (0.5 * Math.PI);
+			}
+			yaw = (float) yaw - (float) Math.atan(dz / dx);
+		} else if (dz < 0) {
+			yaw = (float) Math.PI;
+		}
+
+		double dxz = Math.sqrt(Math.pow(dx, 2) + Math.pow(dz, 2));
+
+		pitch = (float) -Math.atan(dy / dxz);
+
+		if (ad != null) {
+			ad.setYawPitch(-yaw * 180F / (float) Math.PI - 180F, pitch * 180F / (float) Math.PI - 180F);
+		}
+	}
+
+	public static void setYawPitchWither(AbstractMEWither aw, Vector start, Vector l) {
+		double dx = l.getX() - start.getX();
+		double dy = l.getY() - start.getY();
+		double dz = l.getZ() - start.getZ();
+
+		float yaw = 0F;
+		float pitch = 0F;
+
+		if (dx != 0) {
+			if (dx < 0) {
+				yaw = (float) (1.5 * Math.PI);
+			} else {
+				yaw = (float) (0.5 * Math.PI);
+			}
+			yaw = (float) yaw - (float) Math.atan(dz / dx);
+		} else if (dz < 0) {
+			yaw = (float) Math.PI;
+		}
+
+		double dxz = Math.sqrt(Math.pow(dx, 2) + Math.pow(dz, 2));
+
+		pitch = (float) -Math.atan(dy / dxz);
+
+		if (aw != null) {
+			aw.setYawPitch(-yaw * 180F / (float) Math.PI - 180F, pitch * 180F / (float) Math.PI - 180F);
+		}
+	}
+
 }

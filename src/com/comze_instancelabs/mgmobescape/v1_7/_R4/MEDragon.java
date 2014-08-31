@@ -13,9 +13,10 @@ import org.bukkit.util.Vector;
 import com.comze_instancelabs.mgmobescape.AbstractMEDragon;
 import com.comze_instancelabs.mgmobescape.IArena;
 import com.comze_instancelabs.mgmobescape.Main;
+import com.comze_instancelabs.mgmobescape.mobtools.Tools;
 import com.comze_instancelabs.minigamesapi.MinigamesAPI;
 
-public class MEDragon extends EntityEnderDragon implements AbstractMEDragon{
+public class MEDragon extends EntityEnderDragon implements AbstractMEDragon {
 
 	private boolean onGround = false;
 	private ArrayList<Vector> points = new ArrayList();
@@ -91,7 +92,7 @@ public class MEDragon extends EntityEnderDragon implements AbstractMEDragon{
 	}
 
 	public Vector getNextPosition() {
-		
+
 		double tempx = this.locX;
 		double tempy = this.locY;
 		double tempz = this.locZ;
@@ -103,7 +104,7 @@ public class MEDragon extends EntityEnderDragon implements AbstractMEDragon{
 				// finish
 				arena.stop();
 			}
-			
+
 			ArrayList<String> temp = arena.getAllPlayers();
 			for (String p : temp) {
 				if (m.ppoint.containsKey(p)) {
@@ -118,42 +119,18 @@ public class MEDragon extends EntityEnderDragon implements AbstractMEDragon{
 			double disX = (this.locX - points.get(currentid).getX());
 			double disY = (this.locY - points.get(currentid).getY());
 			double disZ = (this.locZ - points.get(currentid).getZ());
-			
+
 			double tick_ = Math.sqrt(disX * disX + disY * disY + disZ * disZ) * 2 / m.mob_speed * Math.pow(0.98, currentid);
 
 			this.X = (Math.abs(disX) / tick_);
 			this.Y = (Math.abs(disY) / tick_);
 			this.Z = (Math.abs(disZ) / tick_);
 
-			if ((int)this.locX <= points.get(currentid).getX()) {
-				if ((int)this.locZ >= points.get(currentid).getZ()) {
-					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 180F;
-				} else {
-					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) - 90F;
-				}
-			} else { // (this.locX > points.get(currentid).getX())
-				if ((int)this.locZ >= points.get(currentid).getZ()) {
-					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 90F;
-				} else {
-					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z));
-				}
-			}
+			Tools.setYawPitchDragon(arena.getDragon(), new Vector(this.locX, this.locY, this.locZ), points.get(currentid));
 
 		}
 
-		if ((int)this.locX <= points.get(currentid).getX()) {
-			if ((int)this.locZ >= points.get(currentid).getZ()) {
-				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 180F;
-			} else {
-				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) - 90F;
-			}
-		} else { // (this.locX > points.get(currentid).getX())
-			if ((int)this.locZ >= points.get(currentid).getZ()) {
-				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 90F;
-			} else {
-				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z));
-			}
-		}
+		Tools.setYawPitchDragon(arena.getDragon(), new Vector(this.locX, this.locY, this.locZ), points.get(currentid));
 
 		if (tempx < points.get(currentid).getX())
 			tempx += this.X;
@@ -172,26 +149,27 @@ public class MEDragon extends EntityEnderDragon implements AbstractMEDragon{
 		else {
 			tempz -= this.Z;
 		}
-		
+
 		return new Vector(tempx, tempy, tempz);
 	}
 
-	public static float getLookAtYaw(Vector motion) {
-		double dx = motion.getX();
-		double dz = motion.getZ();
-		double yaw = 0;
-
-		if (dx != 0) {
-			if (dx < 0) {
-				yaw = 1.5 * Math.PI;
-			} else {
-				yaw = 0.5 * Math.PI;
-			}
-			yaw -= Math.atan(dz / dx);
-		} else if (dz < 0) {
-			yaw = Math.PI;
-		}
-		return (float) (-yaw * 180 / Math.PI - 90);
+	@Override
+	public void setYawPitch(float yaw, float pitch) {
+		this.yaw = yaw;
+		this.pitch = pitch;
 	}
+
+	/*
+	 * public void setYawPitch(Vector l) { double dx = l.getX() - this.locX; double dy = l.getY() - this.locY; double dz = l.getZ() - this.locZ;
+	 * 
+	 * if (dx != 0) { if (dx < 0) { this.yaw = (float) (1.5 * Math.PI); } else { this.yaw = (float) (0.5 * Math.PI); } this.yaw = (float) this.yaw -
+	 * (float) Math.atan(dz / dx); } else if (dz < 0) { this.yaw = (float) Math.PI; }
+	 * 
+	 * double dxz = Math.sqrt(Math.pow(dx, 2) + Math.pow(dz, 2));
+	 * 
+	 * pitch = (float) -Math.atan(dy / dxz);
+	 * 
+	 * this.yaw = -yaw * 180F / (float) Math.PI - 180F; this.pitch = pitch * 180F / (float) Math.PI - 180F; }
+	 */
 
 }

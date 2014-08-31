@@ -13,6 +13,7 @@ import org.bukkit.util.Vector;
 import com.comze_instancelabs.mgmobescape.AbstractMEDragon;
 import com.comze_instancelabs.mgmobescape.IArena;
 import com.comze_instancelabs.mgmobescape.Main;
+import com.comze_instancelabs.mgmobescape.mobtools.Tools;
 import com.comze_instancelabs.minigamesapi.MinigamesAPI;
 
 public class MEDragon extends EntityEnderDragon implements AbstractMEDragon {
@@ -107,7 +108,7 @@ public class MEDragon extends EntityEnderDragon implements AbstractMEDragon {
 			ArrayList<String> temp = arena.getAllPlayers();
 			for (String p : temp) {
 				if (m.ppoint.containsKey(p)) {
-					//System.out.println("p:" + m.ppoint.get(p) + " d:" + currentid);
+					// System.out.println("p:" + m.ppoint.get(p) + " d:" + currentid);
 					if (m.ppoint.get(p) < currentid - 1) {
 						// player fell behind mob
 						arena.spectate(p);
@@ -125,35 +126,11 @@ public class MEDragon extends EntityEnderDragon implements AbstractMEDragon {
 			this.Y = (Math.abs(disY) / tick_);
 			this.Z = (Math.abs(disZ) / tick_);
 
-			if ((int) this.locX <= points.get(currentid).getX()) {
-				if ((int) this.locZ >= points.get(currentid).getZ()) {
-					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 180F;
-				} else {
-					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) - 90F;
-				}
-			} else { // (this.locX > points.get(currentid).getX())
-				if ((int) this.locZ >= points.get(currentid).getZ()) {
-					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 90F;
-				} else {
-					this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z));
-				}
-			}
+			Tools.setYawPitchDragon(arena.getDragon(), new Vector(this.locX, this.locY, this.locZ), points.get(currentid));
 
 		}
 
-		if ((int) this.locX <= points.get(currentid).getX()) {
-			if ((int) this.locZ >= points.get(currentid).getZ()) {
-				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 180F;
-			} else {
-				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) - 90F;
-			}
-		} else { // (this.locX > points.get(currentid).getX())
-			if ((int) this.locZ >= points.get(currentid).getZ()) {
-				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z)) + 90F;
-			} else {
-				this.yaw = getLookAtYaw(new Vector(this.X, this.Y, this.Z));
-			}
-		}
+		Tools.setYawPitchDragon(arena.getDragon(), new Vector(this.locX, this.locY, this.locZ), points.get(currentid));
 
 		if (tempx < points.get(currentid).getX())
 			tempx += this.X;
@@ -176,22 +153,10 @@ public class MEDragon extends EntityEnderDragon implements AbstractMEDragon {
 		return new Vector(tempx, tempy, tempz);
 	}
 
-	public static float getLookAtYaw(Vector motion) {
-		double dx = motion.getX();
-		double dz = motion.getZ();
-		double yaw = 0;
-
-		if (dx != 0) {
-			if (dx < 0) {
-				yaw = 1.5 * Math.PI;
-			} else {
-				yaw = 0.5 * Math.PI;
-			}
-			yaw -= Math.atan(dz / dx);
-		} else if (dz < 0) {
-			yaw = Math.PI;
-		}
-		return (float) (-yaw * 180 / Math.PI - 90);
+	@Override
+	public void setYawPitch(float yaw, float pitch) {
+		this.yaw = yaw;
+		this.pitch = pitch;
 	}
 
 }

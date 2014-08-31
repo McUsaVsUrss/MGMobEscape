@@ -31,8 +31,8 @@ public class IArena extends Arena {
 	public String mobtype = "dragon";
 	BukkitTask currenttask;
 
-	AbstractMEDragon dragon;
-	AbstractMEWither wither;
+	private AbstractMEDragon dragon;
+	private AbstractMEWither wither;
 	AbstractDragon ad;
 	AbstractWither aw;
 
@@ -69,36 +69,36 @@ public class IArena extends Arena {
 		if (mobtype.equalsIgnoreCase("dragon")) {
 			if (m.mode1_6) {
 				ad = new V1_6Dragon();
-				dragon = V1_6Dragon.spawnEnderdragon1_6(m, arena, a.getDragonSpawn());
+				setDragon(V1_6Dragon.spawnEnderdragon1_6(m, arena, a.getDragonSpawn()));
 			} else if (m.mode1_7_5) {
 				ad = new V1_7_5Dragon();
-				dragon = V1_7_5Dragon.spawnEnderdragon(m, arena, a.getDragonSpawn());
+				setDragon(V1_7_5Dragon.spawnEnderdragon(m, arena, a.getDragonSpawn()));
 			} else if (m.mode1_7_8) {
 				ad = new V1_7_8Dragon();
-				dragon = V1_7_8Dragon.spawnEnderdragon(m, arena, a.getDragonSpawn());
+				setDragon(V1_7_8Dragon.spawnEnderdragon(m, arena, a.getDragonSpawn()));
 			} else if (m.mode1_7_10) {
 				ad = new V1_7_10Dragon();
-				dragon = V1_7_10Dragon.spawnEnderdragon(m, arena, a.getDragonSpawn());
+				setDragon(V1_7_10Dragon.spawnEnderdragon(m, arena, a.getDragonSpawn()));
 			} else {
 				ad = new V1_7Dragon();
-				dragon = V1_7Dragon.spawnEnderdragon(m, arena, a.getDragonSpawn());
+				setDragon(V1_7Dragon.spawnEnderdragon(m, arena, a.getDragonSpawn()));
 			}
 		} else {
 			if (m.mode1_6) {
 				aw = new V1_6Wither();
-				wither = V1_6Wither.spawnWither1_6(m, arena, a.getDragonSpawn());
+				setWither(V1_6Wither.spawnWither1_6(m, arena, a.getDragonSpawn()));
 			} else if (m.mode1_7_5) {
 				aw = new V1_7_5Wither();
-				wither = V1_7_5Wither.spawnWither(m, arena, a.getDragonSpawn());
+				setWither(V1_7_5Wither.spawnWither(m, arena, a.getDragonSpawn()));
 			} else if (m.mode1_7_8) {
 				aw = new V1_7_8Wither();
-				wither = V1_7_8Wither.spawnWither(m, arena, a.getDragonSpawn());
+				setWither(V1_7_8Wither.spawnWither(m, arena, a.getDragonSpawn()));
 			} else if (m.mode1_7_10) {
 				aw = new V1_7_10Wither();
-				wither = V1_7_10Wither.spawnWither(m, arena, a.getDragonSpawn());
+				setWither(V1_7_10Wither.spawnWither(m, arena, a.getDragonSpawn()));
 			} else {
 				aw = new V1_7Wither();
-				wither = V1_7Wither.spawnWither(m, arena, a.getDragonSpawn());
+				setWither(V1_7Wither.spawnWither(m, arena, a.getDragonSpawn()));
 			}
 		}
 
@@ -133,10 +133,10 @@ public class IArena extends Arena {
 			currenttask = Bukkit.getServer().getScheduler().runTaskTimer(m, new Runnable() {
 				@Override
 				public void run() {
-					if (dragon != null) {
-						Vector v = dragon.getNextPosition();
+					if (getDragon() != null) {
+						Vector v = getDragon().getNextPosition();
 						if (v != null) {
-							dragon.setPosition(v.getX(), v.getY(), v.getZ());
+							getDragon().setPosition(v.getX(), v.getY(), v.getZ());
 						}
 
 						ad.destroy(m, l1, l2, arena, length2);
@@ -177,10 +177,10 @@ public class IArena extends Arena {
 			currenttask = Bukkit.getServer().getScheduler().runTaskTimer(m, new Runnable() {
 				@Override
 				public void run() {
-					if (wither != null) {
-						Vector v = wither.getNextPosition();
+					if (getWither() != null) {
+						Vector v = getWither().getNextPosition();
 						if (v != null) {
-							wither.setPosition(v.getX(), v.getY(), v.getZ());
+							getWither().setPosition(v.getX(), v.getY(), v.getZ());
 						}
 
 						aw.destroy(m, l1, l2, arena, length2);
@@ -193,8 +193,8 @@ public class IArena extends Arena {
 	@Override
 	public void stop() {
 		this.stop(currenttask, this.getName());
-		dragon = null;
-		wither = null;
+		setDragon(null);
+		setWither(null);
 		super.stop();
 	}
 
@@ -275,5 +275,21 @@ public class IArena extends Arena {
 				Util.loadArenaFromFileSYNC(m, a);
 			}
 		});*/
+	}
+
+	public AbstractMEDragon getDragon() {
+		return dragon;
+	}
+
+	public void setDragon(AbstractMEDragon dragon) {
+		this.dragon = dragon;
+	}
+
+	public AbstractMEWither getWither() {
+		return wither;
+	}
+
+	public void setWither(AbstractMEWither wither) {
+		this.wither = wither;
 	}
 }
