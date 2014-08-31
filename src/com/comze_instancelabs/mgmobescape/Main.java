@@ -390,10 +390,12 @@ public class Main extends JavaPlugin implements Listener {
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
 		if (event.getEntity() instanceof Player) {
 			Player p = (Player) event.getEntity();
-			Player attacker;
+			Player attacker = null;
 			if (event.getDamager() instanceof Projectile) {
 				Projectile projectile = (Projectile) event.getDamager();
-				attacker = (Player) projectile.getShooter();
+				if (projectile.getShooter() instanceof Player) {
+					attacker = (Player) projectile.getShooter();
+				}
 			} else if (event.getDamager() instanceof Player) {
 				attacker = (Player) event.getDamager();
 			} else {
