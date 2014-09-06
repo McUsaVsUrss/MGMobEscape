@@ -101,6 +101,12 @@ public class Main extends JavaPlugin implements Listener {
 		pinstance.scoreboardManager = score;
 		scoreboard = score;
 		pli = pinstance;
+
+		this.getConfig().addDefault("config.mob_name", "Dragon");
+		this.getConfig().options().copyDefaults(true);
+		this.saveConfig();
+
+		this.dragon_name = this.getConfig().getString("config.mob_name");
 	}
 
 	private boolean registerEntities() {
