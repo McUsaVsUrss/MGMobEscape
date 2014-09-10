@@ -3,6 +3,7 @@ package com.comze_instancelabs.mgmobescape;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -62,9 +63,9 @@ public class IArenaScoreboard extends ArenaScoreboard {
 						}
 						try {
 							if (pl_.length() < 15) {
-								aobjective.get(arena.getName()).getScore(Bukkit.getOfflinePlayer("§a" + pl_)).setScore(score);
+								aobjective.get(arena.getName()).getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + pl_)).setScore(score);
 							} else {
-								aobjective.get(arena.getName()).getScore(Bukkit.getOfflinePlayer("§a" + pl_.substring(0, pl_.length() - 3))).setScore(score);
+								aobjective.get(arena.getName()).getScore(Bukkit.getOfflinePlayer(ChatColor.GREEN + pl_.substring(0, pl_.length() - 3))).setScore(score);
 							}
 						} catch (Exception e) {
 						}
@@ -73,11 +74,11 @@ public class IArenaScoreboard extends ArenaScoreboard {
 							int score = currentscore.get(pl_);
 							try {
 								if (pl_.length() < 15) {
-									ascore.get(arena.getName()).resetScores("§a" + pl_);
-									aobjective.get(arena.getName()).getScore("§c" + pl_).setScore(score);
+									ascore.get(arena.getName()).resetScores(ChatColor.GREEN + pl_);
+									aobjective.get(arena.getName()).getScore(ChatColor.RED + pl_).setScore(score);
 								} else {
-									ascore.get(arena.getName()).resetScores(Bukkit.getOfflinePlayer("§a" + pl_.substring(0, p_.length() - 3)));
-									aobjective.get(arena.getName()).getScore(Bukkit.getOfflinePlayer("§c" + pl_.substring(0, p_.length() - 3))).setScore(score);
+									ascore.get(arena.getName()).resetScores(Bukkit.getOfflinePlayer(ChatColor.GREEN + pl_.substring(0, p_.length() - 3)));
+									aobjective.get(arena.getName()).getScore(Bukkit.getOfflinePlayer(ChatColor.RED + pl_.substring(0, p_.length() - 3))).setScore(score);
 								}
 							} catch (Exception e) {
 							}
