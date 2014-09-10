@@ -103,10 +103,12 @@ public class Main extends JavaPlugin implements Listener {
 		pli = pinstance;
 
 		this.getConfig().addDefault("config.mob_name", "Dragon");
+		this.getConfig().addDefault("config.mob_speed", mob_speed);
 		this.getConfig().options().copyDefaults(true);
 		this.saveConfig();
 
 		this.dragon_name = this.getConfig().getString("config.mob_name");
+		this.mob_speed = this.getConfig().getDouble("config.mob_speed");
 	}
 
 	private boolean registerEntities() {
