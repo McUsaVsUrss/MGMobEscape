@@ -60,6 +60,7 @@ public class Main extends JavaPlugin implements Listener {
 	public int destroy_radius = 10;
 	public String dragon_name = "Dragon";
 	public boolean spawn_falling_blocks = true;
+	public boolean all_living_players_win = true;
 
 	public double mob_speed = 1.0;
 	public static boolean mode1_6 = false;
@@ -104,11 +105,17 @@ public class Main extends JavaPlugin implements Listener {
 
 		this.getConfig().addDefault("config.mob_name", "Dragon");
 		this.getConfig().addDefault("config.mob_speed", mob_speed);
+		this.getConfig().addDefault("config.destroy_radius", destroy_radius);
+		this.getConfig().addDefault("config.spawn_falling_blocks", spawn_falling_blocks);
+		this.getConfig().addDefault("config.all_living_players_win", all_living_players_win);
 		this.getConfig().options().copyDefaults(true);
 		this.saveConfig();
 
 		this.dragon_name = this.getConfig().getString("config.mob_name");
 		this.mob_speed = this.getConfig().getDouble("config.mob_speed");
+		this.destroy_radius = this.getConfig().getInt("config.destroy_radius");
+		this.spawn_falling_blocks = this.getConfig().getBoolean("config.spawn_falling_blocks");
+		this.all_living_players_win = this.getConfig().getBoolean("config.all_living_players_win");
 	}
 
 	private boolean registerEntities() {
@@ -267,6 +274,14 @@ public class Main extends JavaPlugin implements Listener {
 
 						int index = getAllPoints(m, a.getName()).size() - 1;
 						if (Math.abs(p.getLocation().getBlockX() - getAllPoints(m, a.getName()).get(index).getBlockX()) < 3 && Math.abs(p.getLocation().getBlockZ() - getAllPoints(m, a.getName()).get(index).getBlockZ()) < 3 && Math.abs(p.getLocation().getBlockY() - getAllPoints(m, a.getName()).get(index).getBlockY()) < 3) {
+							// TODO test out
+							if (!all_living_players_win) {
+								for (String p_ : a.getAllPlayers()) {
+									if (!p_.equalsIgnoreCase(p.getName())) {
+										pli.global_lost.put(p_, a);
+									}
+								}
+							}
 							a.stop();
 							return;
 						}
