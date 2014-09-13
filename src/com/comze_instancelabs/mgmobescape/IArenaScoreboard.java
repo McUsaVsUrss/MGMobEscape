@@ -74,8 +74,8 @@ public class IArenaScoreboard extends ArenaScoreboard {
 							int score = currentscore.get(pl_);
 							try {
 								if (pl_.length() < 15) {
-									ascore.get(arena.getName()).resetScores(ChatColor.GREEN + pl_);
-									aobjective.get(arena.getName()).getScore(ChatColor.RED + pl_).setScore(score);
+									ascore.get(arena.getName()).resetScores(Bukkit.getOfflinePlayer(ChatColor.GREEN + pl_));
+									aobjective.get(arena.getName()).getScore(Bukkit.getOfflinePlayer(ChatColor.RED + pl_)).setScore(score);
 								} else {
 									ascore.get(arena.getName()).resetScores(Bukkit.getOfflinePlayer(ChatColor.GREEN + pl_.substring(0, p_.length() - 3)));
 									aobjective.get(arena.getName()).getScore(Bukkit.getOfflinePlayer(ChatColor.RED + pl_.substring(0, p_.length() - 3))).setScore(score);

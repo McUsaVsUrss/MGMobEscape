@@ -274,7 +274,6 @@ public class Main extends JavaPlugin implements Listener {
 
 						int index = getAllPoints(m, a.getName()).size() - 1;
 						if (Math.abs(p.getLocation().getBlockX() - getAllPoints(m, a.getName()).get(index).getBlockX()) < 3 && Math.abs(p.getLocation().getBlockZ() - getAllPoints(m, a.getName()).get(index).getBlockZ()) < 3 && Math.abs(p.getLocation().getBlockY() - getAllPoints(m, a.getName()).get(index).getBlockY()) < 3) {
-							// TODO test out
 							if (!all_living_players_win) {
 								for (String p_ : a.getAllPlayers()) {
 									if (!p_.equalsIgnoreCase(p.getName())) {
