@@ -245,16 +245,8 @@ public class Main extends JavaPlugin implements Listener {
 	@EventHandler
 	public void EntityChangeBlockEvent(org.bukkit.event.entity.EntityChangeBlockEvent event) {
 		if (event.getEntityType() == EntityType.FALLING_BLOCK) {
-			for (Arena a : MinigamesAPI.getAPI().pinstances.get(m).getArenas()) {
-				if (Validator.isArenaValid(m, a)) {
-					// Cuboid c = new Cuboid(Util.getComponentForArena(m, a.getName(), "bounds.low"), Util.getComponentForArena(m, a.getName(),
-					// "bounds.high"));
-					// if (c.containsLocWithoutY(event.getBlock().getLocation())) {
-					if (event.getEntity().hasMetadata("1337")) {
-						event.setCancelled(true);
-					}
-					// }
-				}
+			if (event.getEntity().hasMetadata("1337")) {
+				event.setCancelled(true);
 			}
 		}
 	}
@@ -390,20 +382,10 @@ public class Main extends JavaPlugin implements Listener {
 				p.setVelocity(direction);
 				event.setCancelled(true);
 			} else if (event.getItem().getTypeId() == 368) {
-				/*p.getInventory().removeItem(new ItemStack(Material.ENDER_PEARL, 1));
-				p.updateInventory();
-				p.getInventory().removeItem(new ItemStack(Material.ENDER_PEARL, 2));
-				p.updateInventory();*/
 				event.setCancelled(true);
 			} else if (event.getItem().getTypeId() == 46) {
-				/*p.getInventory().removeItem(new ItemStack(Material.TNT, 1));
-				p.updateInventory();
-				p.getInventory().removeItem(new ItemStack(Material.TNT, 2));
-				p.updateInventory();*/
 				p.getLocation().getWorld().dropItemNaturally(p.getLocation().add(0, 3, 0), new ItemStack(Material.TNT)).setVelocity(new Vector(0, 1, 0));
 				event.setCancelled(true);
-				/*p.getInventory().removeItem(new ItemStack(Material.TNT, 2));
-				p.updateInventory();*/
 			}
 			if (amount - 1 > 0) {
 				p.getInventory().addItem(new ItemStack(type, amount - 1));
