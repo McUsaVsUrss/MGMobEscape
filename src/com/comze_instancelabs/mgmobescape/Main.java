@@ -362,37 +362,57 @@ public class Main extends JavaPlugin implements Listener {
 		}
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		final Player p = event.getPlayer();
 		if (pli.global_players.containsKey(p.getName())) {
 			if (!event.hasItem()) {
 				return;
 			}
+			if (pli.global_players.get(p.getName()).getArenaState() != ArenaState.INGAME) {
+				return;
+			}
+			int amount = event.getItem().getAmount();
+			Material type = event.getItem().getType();
+			ArrayList<ItemStack> temp = new ArrayList<ItemStack>();
+			for (ItemStack i : p.getInventory().getContents()) {
+				if (i != null) {
+					if (i.getType() != type) {
+						temp.add(i);
+					}
+				}
+			}
+			p.getInventory().clear();
+			p.updateInventory();
 			if (event.getItem().getTypeId() == 258) {
-				p.getInventory().removeItem(new ItemStack(Material.IRON_AXE, 2));
-				p.updateInventory();
 				Vector direction = p.getLocation().getDirection().multiply(1.3D);
 				direction.setY(direction.getY() + 1.5);
 				p.setVelocity(direction);
-				// p.setVelocity(p.getVelocity().multiply(2D));
 				event.setCancelled(true);
-				p.getInventory().removeItem(new ItemStack(Material.IRON_AXE, 2));
-				p.updateInventory();
-				return;
 			} else if (event.getItem().getTypeId() == 368) {
+				/*p.getInventory().removeItem(new ItemStack(Material.ENDER_PEARL, 1));
+				p.updateInventory();
 				p.getInventory().removeItem(new ItemStack(Material.ENDER_PEARL, 2));
-				p.updateInventory();
-				return;
+				p.updateInventory();*/
+				event.setCancelled(true);
 			} else if (event.getItem().getTypeId() == 46) {
-				p.getInventory().removeItem(new ItemStack(Material.TNT, 2));
+				/*p.getInventory().removeItem(new ItemStack(Material.TNT, 1));
 				p.updateInventory();
+				p.getInventory().removeItem(new ItemStack(Material.TNT, 2));
+				p.updateInventory();*/
 				p.getLocation().getWorld().dropItemNaturally(p.getLocation().add(0, 3, 0), new ItemStack(Material.TNT)).setVelocity(new Vector(0, 1, 0));
 				event.setCancelled(true);
-				p.getInventory().removeItem(new ItemStack(Material.TNT, 2));
-				p.updateInventory();
-				return;
+				/*p.getInventory().removeItem(new ItemStack(Material.TNT, 2));
+				p.updateInventory();*/
 			}
+			if (amount - 1 > 0) {
+				p.getInventory().addItem(new ItemStack(type, amount - 1));
+			}
+			for (ItemStack i_ : temp) {
+				p.getInventory().addItem(i_);
+			}
+			p.updateInventory();
+			return;
 		}
 
 	}
