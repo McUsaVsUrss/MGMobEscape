@@ -116,6 +116,10 @@ public class Main extends JavaPlugin implements Listener {
 		this.destroy_radius = this.getConfig().getInt("config.destroy_radius");
 		this.spawn_falling_blocks = this.getConfig().getBoolean("config.spawn_falling_blocks");
 		this.all_living_players_win = this.getConfig().getBoolean("config.all_living_players_win");
+		
+		cmdhandler.cmddesc.put("  ", "");
+		cmdhandler.cmddesc.put("setflypoint <arena>", "Sets flypoints, you need more than two");
+		cmdhandler.cmddesc.put("setmobspawn <arena>", "Sets the mob spawn");
 	}
 
 	private boolean registerEntities() {
