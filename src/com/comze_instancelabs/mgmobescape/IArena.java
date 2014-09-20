@@ -104,10 +104,6 @@ public class IArena extends Arena {
 
 		if (mobtype.equalsIgnoreCase("dragon")) {
 			AbstractDragon ad_ = this.ad;
-			/*
-			 * if (m.mode1_6) { ad_ = new V1_6Dragon(); } else if (m.mode1_7_5) { ad_ = new V1_7_5Dragon(); } else if (m.mode1_7_8) { ad_ = new
-			 * V1_7_8Dragon(); } else if (m.mode1_7_10) { ad_ = new V1_7_10Dragon(); } else { ad_ = new V1_7Dragon(); }
-			 */
 
 			final AbstractDragon ad = ad_;
 
@@ -268,13 +264,11 @@ public class IArena extends Arena {
 
 	@Override
 	public void reset() {
-		//final Arena a = this;
+		// final Arena a = this;
 		super.reset();
-		/*Bukkit.getScheduler().runTask(m, new Runnable() {
-			public void run() {
-				Util.loadArenaFromFileSYNC(m, a);
-			}
-		});*/
+		/*
+		 * Bukkit.getScheduler().runTask(m, new Runnable() { public void run() { Util.loadArenaFromFileSYNC(m, a); } });
+		 */
 	}
 
 	public AbstractMEDragon getDragon() {

@@ -55,12 +55,11 @@ public class Main extends JavaPlugin implements Listener {
 	ICommandHandler cmdhandler;
 	IArenaScoreboard scoreboard;
 
-	// TODO add into default config
-
 	public int destroy_radius = 10;
 	public String dragon_name = "Dragon";
 	public boolean spawn_falling_blocks = true;
 	public boolean all_living_players_win = true;
+	public boolean die_below_zero = false;
 
 	public double mob_speed = 1.0;
 	public static boolean mode1_6 = false;
@@ -108,6 +107,7 @@ public class Main extends JavaPlugin implements Listener {
 		this.getConfig().addDefault("config.destroy_radius", destroy_radius);
 		this.getConfig().addDefault("config.spawn_falling_blocks", spawn_falling_blocks);
 		this.getConfig().addDefault("config.all_living_players_win", all_living_players_win);
+		this.getConfig().addDefault("config.die_below_bedrock_level", false);
 		this.getConfig().options().copyDefaults(true);
 		this.saveConfig();
 
@@ -116,7 +116,11 @@ public class Main extends JavaPlugin implements Listener {
 		this.destroy_radius = this.getConfig().getInt("config.destroy_radius");
 		this.spawn_falling_blocks = this.getConfig().getBoolean("config.spawn_falling_blocks");
 		this.all_living_players_win = this.getConfig().getBoolean("config.all_living_players_win");
+		this.die_below_zero = this.getConfig().getBoolean("config.die_below_bedrock_level");
 
+		if (die_below_zero) {
+			pli.getArenaListener().loseY = 100;
+		}
 	}
 
 	private boolean registerEntities() {
@@ -268,7 +272,7 @@ public class Main extends JavaPlugin implements Listener {
 				final IArena a = (IArena) pli.global_players.get(p.getName());
 				if (!pli.global_lost.containsKey(p.getName())) {
 					if (a.getArenaState() == ArenaState.INGAME) {
-						if (p.getLocation().getBlockY() + 4 < a.lowbounds.getBlockY()) {
+						if (p.getLocation().getBlockY() + pli.getArenaListener().loseY < a.lowbounds.getBlockY()) {
 							a.spectate(p.getName());
 							return;
 						}
