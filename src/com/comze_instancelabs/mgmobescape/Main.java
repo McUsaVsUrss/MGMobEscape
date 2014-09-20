@@ -116,10 +116,7 @@ public class Main extends JavaPlugin implements Listener {
 		this.destroy_radius = this.getConfig().getInt("config.destroy_radius");
 		this.spawn_falling_blocks = this.getConfig().getBoolean("config.spawn_falling_blocks");
 		this.all_living_players_win = this.getConfig().getBoolean("config.all_living_players_win");
-		
-		cmdhandler.cmddesc.put("  ", "");
-		cmdhandler.cmddesc.put("setflypoint <arena>", "Sets flypoints, you need more than two");
-		cmdhandler.cmddesc.put("setmobspawn <arena>", "Sets the mob spawn");
+
 	}
 
 	private boolean registerEntities() {
@@ -156,7 +153,7 @@ public class Main extends JavaPlugin implements Listener {
 		return a;
 	}
 
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+	public boolean onCommand(final CommandSender sender, Command cmd, String label, String[] args) {
 		cmdhandler.handleArgs(this, "mobescape", "/" + cmd.getName(), sender, args);
 		if (args.length > 0) {
 			String action = args[0];
@@ -222,6 +219,14 @@ public class Main extends JavaPlugin implements Listener {
 					sender.sendMessage(ChatColor.AQUA + "Mobtypes: wither, dragon");
 					sender.sendMessage(ChatColor.DARK_GRAY + "[" + ChatColor.RED + "-" + ChatColor.DARK_GRAY + "]" + ChatColor.GRAY + " Usage: /" + cmd.getName() + " " + action + " <arena> <mobtype>");
 				}
+			} else if (action.equalsIgnoreCase("help")) {
+				Bukkit.getScheduler().runTaskLater(this, new Runnable() {
+					public void run() {
+						sender.sendMessage(ChatColor.RED + "Important commands: (Check project page for more information)");
+						sender.sendMessage(ChatColor.DARK_AQUA + "/etm setflypoint <arena>" + ChatColor.GRAY + " - Set at least two of them!");
+						sender.sendMessage(ChatColor.DARK_AQUA + "/etm setmobspawn <arena>");
+					}
+				}, 5L);
 			}
 		}
 		return true;

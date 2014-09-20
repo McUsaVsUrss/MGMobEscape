@@ -1,6 +1,6 @@
 name: MGMobEscape
 main: com.comze_instancelabs.mgmobescape.Main
-version: 1.5.1
+version: 1.5.2
 author: instancelabs
 softdepend: [Vault, MinigamesLib]
 depend: [MinigamesLib]
