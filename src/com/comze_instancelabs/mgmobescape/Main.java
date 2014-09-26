@@ -60,6 +60,7 @@ public class Main extends JavaPlugin implements Listener {
 	public boolean spawn_falling_blocks = true;
 	public boolean all_living_players_win = true;
 	public boolean die_below_zero = false;
+	public boolean pvp = true;
 
 	public double mob_speed = 1.0;
 	public static boolean mode1_6 = false;
@@ -108,6 +109,7 @@ public class Main extends JavaPlugin implements Listener {
 		this.getConfig().addDefault("config.spawn_falling_blocks", spawn_falling_blocks);
 		this.getConfig().addDefault("config.all_living_players_win", all_living_players_win);
 		this.getConfig().addDefault("config.die_below_bedrock_level", false);
+		this.getConfig().addDefault("config.allow_player_pvp", true);
 		this.getConfig().options().copyDefaults(true);
 		this.saveConfig();
 
@@ -117,6 +119,7 @@ public class Main extends JavaPlugin implements Listener {
 		this.spawn_falling_blocks = this.getConfig().getBoolean("config.spawn_falling_blocks");
 		this.all_living_players_win = this.getConfig().getBoolean("config.all_living_players_win");
 		this.die_below_zero = this.getConfig().getBoolean("config.die_below_bedrock_level");
+		this.pvp = this.getConfig().getBoolean("config.allow_player_pvp");
 
 		if (die_below_zero) {
 			pli.getArenaListener().loseY = 100;
@@ -443,8 +446,15 @@ public class Main extends JavaPlugin implements Listener {
 				Arena a = (Arena) pli.global_players.get(p.getName());
 				if (a.getArenaState() == ArenaState.STARTING) {
 					event.setCancelled(true);
+				} else {
+					if (pvp) {
+						event.setCancelled(false);
+						p.damage(1D);
+						p.setVelocity(p.getLocation().getDirection().add(new Vector(0.1, 0.1, 0.1)).multiply(1.5D));
+					}
 				}
 			}
 		}
 	}
+
 }
