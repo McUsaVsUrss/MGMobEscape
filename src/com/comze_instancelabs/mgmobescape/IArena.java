@@ -60,12 +60,11 @@ public class IArena extends Arena {
 
 	@Override
 	public void started() {
-		started_();
-	}
-
-	public void started_() {
 		final String arena = this.getName();
 		final IArena a = this;
+		if (getDragonSpawn() == null || getDragonSpawn().getWorld() == null) {
+			Util.saveComponentForArena(m, arena, "mobspawn", a.getSpawns().get(0).clone().add(0D, 3D, 0D));
+		}
 		if (mobtype.equalsIgnoreCase("dragon")) {
 			if (m.mode1_6) {
 				ad = new V1_6Dragon();
@@ -260,15 +259,6 @@ public class IArena extends Arena {
 
 	public Location getLastDragonWaypointLoc(String arena) {
 		return m.getAllPoints(m, arena).get(m.getAllPoints(m, arena).size() - 1);
-	}
-
-	@Override
-	public void reset() {
-		// final Arena a = this;
-		super.reset();
-		/*
-		 * Bukkit.getScheduler().runTask(m, new Runnable() { public void run() { Util.loadArenaFromFileSYNC(m, a); } });
-		 */
 	}
 
 	public AbstractMEDragon getDragon() {
