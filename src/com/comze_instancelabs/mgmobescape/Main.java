@@ -449,8 +449,9 @@ public class Main extends JavaPlugin implements Listener {
 				} else {
 					if (pvp) {
 						event.setCancelled(false);
-						p.damage(1D);
-						p.setVelocity(p.getLocation().getDirection().add(new Vector(0.1, 0.1, 0.1)).multiply(1.5D));
+						// TODO test if this affects other minigames
+						// p.damage(1D);
+						// p.setVelocity(p.getLocation().getDirection().add(new Vector(0.1, 0.1, 0.1)).multiply(1.5D));
 					}
 				}
 			}
