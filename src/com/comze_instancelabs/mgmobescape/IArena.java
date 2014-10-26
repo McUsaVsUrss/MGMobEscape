@@ -131,7 +131,11 @@ public class IArena extends Arena {
 					if (getDragon() != null) {
 						Vector v = getDragon().getNextPosition();
 						if (v != null) {
-							getDragon().setPosition(v.getX(), v.getY(), v.getZ());
+							try {
+								getDragon().setPosition(v.getX(), v.getY(), v.getZ());
+							} catch (Exception e) {
+								;
+							}
 						}
 
 						ad.destroy(m, l1, l2, arena, length2);

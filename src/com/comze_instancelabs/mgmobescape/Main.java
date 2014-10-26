@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -398,6 +399,11 @@ public class Main extends JavaPlugin implements Listener {
 				p.setVelocity(direction);
 				event.setCancelled(true);
 			} else if (event.getItem().getTypeId() == 368) {
+				for (String p_ : pli.global_players.get(p.getName()).getAllPlayers()) {
+					if (Validator.isPlayerOnline(p_) && !pli.global_lost.containsKey(p_)) {
+						Util.teleportPlayerFixed(p, Bukkit.getPlayer(p_).getLocation());
+					}
+				}
 				event.setCancelled(true);
 			} else if (event.getItem().getTypeId() == 46) {
 				p.getLocation().getWorld().dropItemNaturally(p.getLocation().add(0, 3, 0), new ItemStack(Material.TNT)).setVelocity(new Vector(0, 1, 0));
