@@ -249,6 +249,18 @@ public class IArena extends Arena {
 
 	}
 
+	@Override
+	public void leavePlayer(String playername, boolean fullLeave, boolean arg2) {
+		if (!pli.global_lost.containsKey(playername)) {
+			if (!m.p_used_kit.contains(playername)) {
+				pli.getArenaAchievements().setAchievementDone(playername, "no_used_kit", false);
+			} else {
+				m.p_used_kit.remove(playername);
+			}
+		}
+		super.leavePlayer(playername, fullLeave, arg2);
+	}
+
 	public Location getDragonSpawn() {
 		return Util.getComponentForArena(m, this.getName(), "mobspawn");
 	}

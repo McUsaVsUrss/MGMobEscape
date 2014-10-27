@@ -1,5 +1,6 @@
 package com.comze_instancelabs.mgmobescape;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -70,6 +71,7 @@ public class Main extends JavaPlugin implements Listener {
 	public static boolean mode1_7_10 = false;
 
 	public HashMap<String, Integer> ppoint = new HashMap<String, Integer>();
+	public ArrayList<String> p_used_kit = new ArrayList<String>();
 
 	public void onEnable() {
 		cmdhandler = new ICommandHandler();
@@ -125,6 +127,26 @@ public class Main extends JavaPlugin implements Listener {
 		if (die_below_zero) {
 			pli.getArenaListener().loseY = 100;
 		}
+
+		try {
+			pinstance.getClass().getMethod("setAchievementGuiEnabled", boolean.class);
+			pinstance.setAchievementGuiEnabled(true);
+		} catch (NoSuchMethodException e) {
+			System.out.println("Update your MinigamesLib to the latest version to use the Achievement Gui.");
+		}
+
+		boolean continue_ = false;
+		for (Method m : pli.getArenaAchievements().getClass().getMethods()) {
+			if (m.getName().equalsIgnoreCase("addDefaultAchievement")) {
+				continue_ = true;
+			}
+		}
+		if (continue_) {
+			pli.getArenaAchievements().addDefaultAchievement("no_used_kit", "Haven't used any kit!", 50);
+			pli.getAchievementsConfig().getConfig().options().copyDefaults(true);
+			pli.getAchievementsConfig().saveConfig();
+		}
+
 	}
 
 	private boolean registerEntities() {
@@ -398,6 +420,7 @@ public class Main extends JavaPlugin implements Listener {
 				direction.setY(direction.getY() + 1.5);
 				p.setVelocity(direction);
 				event.setCancelled(true);
+				p_used_kit.add(p.getName());
 			} else if (event.getItem().getTypeId() == 368) {
 				for (String p_ : pli.global_players.get(p.getName()).getAllPlayers()) {
 					if (Validator.isPlayerOnline(p_) && !pli.global_lost.containsKey(p_)) {
@@ -405,9 +428,11 @@ public class Main extends JavaPlugin implements Listener {
 					}
 				}
 				event.setCancelled(true);
+				p_used_kit.add(p.getName());
 			} else if (event.getItem().getTypeId() == 46) {
 				p.getLocation().getWorld().dropItemNaturally(p.getLocation().add(0, 3, 0), new ItemStack(Material.TNT)).setVelocity(new Vector(0, 1, 0));
 				event.setCancelled(true);
+				p_used_kit.add(p.getName());
 			}
 			if (amount - 1 > 0) {
 				p.getInventory().addItem(new ItemStack(type, amount - 1));
