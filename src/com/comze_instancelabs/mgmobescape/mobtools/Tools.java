@@ -221,7 +221,7 @@ public class Tools {
 		pitch = (float) -Math.atan(dy / dxz);
 
 		if (aw != null) {
-			aw.setYawPitch(-yaw * 180F / (float) Math.PI - 180F, pitch * 180F / (float) Math.PI - 180F);
+			aw.setYawPitch(-yaw * 180F / (float) Math.PI, pitch * 180F / (float) Math.PI);
 		}
 	}
 
