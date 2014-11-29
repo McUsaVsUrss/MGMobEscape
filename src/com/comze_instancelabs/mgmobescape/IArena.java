@@ -17,6 +17,8 @@ import com.comze_instancelabs.mgmobescape.v1_7._R3.V1_7_8Dragon;
 import com.comze_instancelabs.mgmobescape.v1_7._R3.V1_7_8Wither;
 import com.comze_instancelabs.mgmobescape.v1_7._R4.V1_7_10Dragon;
 import com.comze_instancelabs.mgmobescape.v1_7._R4.V1_7_10Wither;
+import com.comze_instancelabs.mgmobescape.v1_8._R1.V1_8Dragon;
+import com.comze_instancelabs.mgmobescape.v1_8._R1.V1_8Wither;
 import com.comze_instancelabs.minigamesapi.Arena;
 import com.comze_instancelabs.minigamesapi.ArenaType;
 import com.comze_instancelabs.minigamesapi.MinigamesAPI;
@@ -78,6 +80,9 @@ public class IArena extends Arena {
 			} else if (m.mode1_7_10) {
 				ad = new V1_7_10Dragon();
 				setDragon(V1_7_10Dragon.spawnEnderdragon(m, arena, a.getDragonSpawn()));
+			} else if (m.mode1_8) {
+				ad = new V1_8Dragon();
+				setDragon(V1_8Dragon.spawnEnderdragon(m, arena, a.getDragonSpawn()));
 			} else {
 				ad = new V1_7Dragon();
 				setDragon(V1_7Dragon.spawnEnderdragon(m, arena, a.getDragonSpawn()));
@@ -95,6 +100,9 @@ public class IArena extends Arena {
 			} else if (m.mode1_7_10) {
 				aw = new V1_7_10Wither();
 				setWither(V1_7_10Wither.spawnWither(m, arena, a.getDragonSpawn()));
+			} else if (m.mode1_8) {
+				aw = new V1_8Wither();
+				setWither(V1_8Wither.spawnWither(m, arena, a.getDragonSpawn()));
 			} else {
 				aw = new V1_7Wither();
 				setWither(V1_7Wither.spawnWither(m, arena, a.getDragonSpawn()));
@@ -157,35 +165,40 @@ public class IArena extends Arena {
 			final Location l1 = Util.getComponentForArena(m, arena, "bounds.low");
 			final Location l2 = Util.getComponentForArena(m, arena, "bounds.high");
 
-			int length1 = l1.getBlockX() - l2.getBlockX();
-			final int length2 = l1.getBlockY() - l2.getBlockY();
-			int length3 = l1.getBlockZ() - l2.getBlockZ();
-			boolean f = false;
-			boolean f_ = false;
-			if (l2.getBlockX() > l1.getBlockX()) {
-				length1 = l2.getBlockX() - l1.getBlockX();
-				f = true;
-			}
-
-			if (l2.getBlockZ() > l1.getBlockZ()) {
-				length3 = l2.getBlockZ() - l1.getBlockZ();
-				f_ = true;
-			}
-
-			// currenttask = Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(m, new Runnable() {
-			currenttask = Bukkit.getServer().getScheduler().runTaskTimer(m, new Runnable() {
-				@Override
-				public void run() {
-					if (getWither() != null) {
-						Vector v = getWither().getNextPosition();
-						if (v != null) {
-							getWither().setPosition(v.getX(), v.getY(), v.getZ());
-						}
-
-						aw.destroy(m, l1, l2, arena, length2);
-					}
+			if (l1 != null && l2 != null) {
+				int length1 = l1.getBlockX() - l2.getBlockX();
+				final int length2 = l1.getBlockY() - l2.getBlockY();
+				int length3 = l1.getBlockZ() - l2.getBlockZ();
+				boolean f = false;
+				boolean f_ = false;
+				if (l2.getBlockX() > l1.getBlockX()) {
+					length1 = l2.getBlockX() - l1.getBlockX();
+					f = true;
 				}
-			}, 3 + 20, 3);
+
+				if (l2.getBlockZ() > l1.getBlockZ()) {
+					length3 = l2.getBlockZ() - l1.getBlockZ();
+					f_ = true;
+				}
+
+				// currenttask = Bukkit.getServer().getScheduler().runTaskTimerAsynchronously(m, new Runnable() {
+				currenttask = Bukkit.getServer().getScheduler().runTaskTimer(m, new Runnable() {
+					@Override
+					public void run() {
+						if (getWither() != null) {
+							Vector v = getWither().getNextPosition();
+							if (v != null) {
+								getWither().setPosition(v.getX(), v.getY(), v.getZ());
+							}
+
+							aw.destroy(m, l1, l2, arena, length2);
+						}
+					}
+				}, 3 + 20, 3);
+			} else {
+				System.out.println("You didn't set boundaries, thus the wither/dragon won't move nor destroy anything. Please correct your setup.");
+			}
+
 		}
 	}
 
@@ -202,49 +215,15 @@ public class IArena extends Arena {
 			t.cancel();
 		}
 		try {
-			if (m.mode1_6) {
-				if (mobtype.equalsIgnoreCase("dragon")) {
-					ad.stop(m, t, arena);
-				} else if (mobtype.equalsIgnoreCase("wither")) {
-					aw.stop(m, t, arena);
-				} else {
-					ad.stop(m, t, arena);
-				}
-			} else if (m.mode1_7_5) {
-				if (mobtype.equalsIgnoreCase("dragon")) {
-					ad.stop(m, t, arena);
-				} else if (mobtype.equalsIgnoreCase("wither")) {
-					aw.stop(m, t, arena);
-				} else {
-					ad.stop(m, t, arena);
-				}
-			} else if (m.mode1_7_8) {
-				if (mobtype.equalsIgnoreCase("dragon")) {
-					ad.stop(m, t, arena);
-				} else if (mobtype.equalsIgnoreCase("wither")) {
-					aw.stop(m, t, arena);
-				} else {
-					ad.stop(m, t, arena);
-				}
-			} else if (m.mode1_7_10) {
-				if (mobtype.equalsIgnoreCase("dragon")) {
-					ad.stop(m, t, arena);
-				} else if (mobtype.equalsIgnoreCase("wither")) {
-					aw.stop(m, t, arena);
-				} else {
-					ad.stop(m, t, arena);
-				}
+			if (mobtype.equalsIgnoreCase("dragon")) {
+				ad.stop(m, t, arena);
+			} else if (mobtype.equalsIgnoreCase("wither")) {
+				aw.stop(m, t, arena);
 			} else {
-				if (mobtype.equalsIgnoreCase("dragon")) {
-					ad.stop(m, t, arena);
-				} else if (mobtype.equalsIgnoreCase("wither")) {
-					aw.stop(m, t, arena);
-				} else {
-					ad.stop(m, t, arena);
-				}
+				ad.stop(m, t, arena);
 			}
 		} catch (Exception e) {
-
+			;
 		}
 
 	}

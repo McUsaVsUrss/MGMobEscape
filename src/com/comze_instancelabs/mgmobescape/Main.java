@@ -37,6 +37,7 @@ import com.comze_instancelabs.mgmobescape.v1_7.V1_7Dragon;
 import com.comze_instancelabs.mgmobescape.v1_7._R2.V1_7_5Dragon;
 import com.comze_instancelabs.mgmobescape.v1_7._R3.V1_7_8Dragon;
 import com.comze_instancelabs.mgmobescape.v1_7._R4.V1_7_10Dragon;
+import com.comze_instancelabs.mgmobescape.v1_8._R1.V1_8Dragon;
 import com.comze_instancelabs.minigamesapi.Arena;
 import com.comze_instancelabs.minigamesapi.ArenaSetup;
 import com.comze_instancelabs.minigamesapi.ArenaState;
@@ -69,6 +70,7 @@ public class Main extends JavaPlugin implements Listener {
 	public static boolean mode1_7_5 = false;
 	public static boolean mode1_7_8 = false;
 	public static boolean mode1_7_10 = false;
+	public static boolean mode1_8 = false;
 
 	public HashMap<String, Integer> ppoint = new HashMap<String, Integer>();
 	public ArrayList<String> p_used_kit = new ArrayList<String>();
@@ -94,6 +96,9 @@ public class Main extends JavaPlugin implements Listener {
 		} else if (version.contains("1_7_R4")) {
 			mode1_7_10 = true;
 			getLogger().info("Turned on 1.7.10 mode.");
+		} else if (version.contains("1_8_R1")) {
+			mode1_8 = true;
+			getLogger().info("Turned on 1.8 mode.");
 		}
 		registerEntities();
 
@@ -158,6 +163,8 @@ public class Main extends JavaPlugin implements Listener {
 			return V1_7_8Dragon.registerEntities();
 		} else if (mode1_7_10) {
 			return V1_7_10Dragon.registerEntities();
+		} else if (mode1_8) {
+			return V1_8Dragon.registerEntities();
 		}
 		return V1_7Dragon.registerEntities();
 	}
@@ -298,53 +305,56 @@ public class Main extends JavaPlugin implements Listener {
 				final IArena a = (IArena) pli.global_players.get(p.getName());
 				if (!pli.global_lost.containsKey(p.getName())) {
 					if (a.getArenaState() == ArenaState.INGAME) {
-						if (p.getLocation().getBlockY() + pli.getArenaListener().loseY < a.lowbounds.getBlockY()) {
-							a.spectate(p.getName());
-							return;
-						}
+						if (a.lowbounds != null && a.highbounds != null) {
+							if (p.getLocation().getBlockY() + pli.getArenaListener().loseY < a.lowbounds.getBlockY()) {
+								a.spectate(p.getName());
+								return;
+							}
 
-						int index = getAllPoints(m, a.getName()).size() - 1;
-						if (Math.abs(p.getLocation().getBlockX() - getAllPoints(m, a.getName()).get(index).getBlockX()) < 3 && Math.abs(p.getLocation().getBlockZ() - getAllPoints(m, a.getName()).get(index).getBlockZ()) < 3 && Math.abs(p.getLocation().getBlockY() - getAllPoints(m, a.getName()).get(index).getBlockY()) < 3) {
-							if (!all_living_players_win) {
-								for (String p_ : a.getAllPlayers()) {
-									if (!p_.equalsIgnoreCase(p.getName())) {
-										pli.global_lost.put(p_, a);
+							int index = getAllPoints(m, a.getName()).size() - 1;
+							if (Math.abs(p.getLocation().getBlockX() - getAllPoints(m, a.getName()).get(index).getBlockX()) < 3 && Math.abs(p.getLocation().getBlockZ() - getAllPoints(m, a.getName()).get(index).getBlockZ()) < 3 && Math.abs(p.getLocation().getBlockY() - getAllPoints(m, a.getName()).get(index).getBlockY()) < 3) {
+								if (!all_living_players_win) {
+									for (String p_ : a.getAllPlayers()) {
+										if (!p_.equalsIgnoreCase(p.getName())) {
+											pli.global_lost.put(p_, a);
+										}
 									}
 								}
+								a.stop();
+								return;
 							}
-							a.stop();
-							return;
-						}
 
-						// TODO Die behind mob (experimental)
-						if (!ppoint.containsKey(p.getName())) {
-							ppoint.put(p.getName(), -1);
-						}
-						int i = ppoint.get(p.getName());
+							// TODO Die behind mob (experimental)
+							if (!ppoint.containsKey(p.getName())) {
+								ppoint.put(p.getName(), -1);
+							}
+							int i = ppoint.get(p.getName());
 
-						int size = getAllPoints(m, a.getName()).size();
-						if (i < size) {
-							if (i > -1) {
-								int defaultdelta = 5;
+							int size = getAllPoints(m, a.getName()).size();
+							if (i < size) {
+								if (i > -1) {
+									int defaultdelta = 5;
 
-								if (i + 1 < size) {
-									Location temp = getAllPoints(m, a.getName()).get(i + 1);
+									if (i + 1 < size) {
+										Location temp = getAllPoints(m, a.getName()).get(i + 1);
 
-									if (Math.abs(p.getLocation().getBlockX() - temp.getBlockX()) < defaultdelta && Math.abs(p.getLocation().getBlockZ() - temp.getBlockZ()) < defaultdelta && Math.abs(p.getLocation().getBlockY() - temp.getBlockY()) < defaultdelta * 2) {
+										if (Math.abs(p.getLocation().getBlockX() - temp.getBlockX()) < defaultdelta && Math.abs(p.getLocation().getBlockZ() - temp.getBlockZ()) < defaultdelta && Math.abs(p.getLocation().getBlockY() - temp.getBlockY()) < defaultdelta * 2) {
+											i++;
+											ppoint.put(p.getName(), i);
+										}
+									}
+								} else {
+									int defaultdelta = 5;
+									Location temp = getAllPoints(m, a.getName()).get(0);
+									if (Math.abs(p.getLocation().getBlockX() - temp.getBlockX()) < defaultdelta && Math.abs(p.getLocation().getBlockZ() - temp.getBlockZ()) < defaultdelta) {
 										i++;
 										ppoint.put(p.getName(), i);
 									}
 								}
-							} else {
-								int defaultdelta = 5;
-								Location temp = getAllPoints(m, a.getName()).get(0);
-								if (Math.abs(p.getLocation().getBlockX() - temp.getBlockX()) < defaultdelta && Math.abs(p.getLocation().getBlockZ() - temp.getBlockZ()) < defaultdelta) {
-									i++;
-									ppoint.put(p.getName(), i);
-								}
 							}
+						} else {
+							System.out.println("You forgot to set boundaries, this will cause bugs. Please fix your setup.");
 						}
-
 					}
 				}
 			}

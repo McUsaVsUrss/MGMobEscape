@@ -25,6 +25,8 @@ import com.comze_instancelabs.mgmobescape.v1_7._R3.V1_7_8Dragon;
 import com.comze_instancelabs.mgmobescape.v1_7._R3.V1_7_8Wither;
 import com.comze_instancelabs.mgmobescape.v1_7._R4.V1_7_10Dragon;
 import com.comze_instancelabs.mgmobescape.v1_7._R4.V1_7_10Wither;
+import com.comze_instancelabs.mgmobescape.v1_8._R1.V1_8Dragon;
+import com.comze_instancelabs.mgmobescape.v1_8._R1.V1_8Wither;
 
 public class Tools {
 
@@ -50,6 +52,9 @@ public class Tools {
 					} else if (m.mode1_7_10) {
 						V1_7_10Dragon v = new V1_7_10Dragon();
 						v.removeEnderdragon(arena);
+					} else if (m.mode1_8) {
+						V1_8Dragon v = new V1_8Dragon();
+						v.removeEnderdragon(arena);
 					} else {
 						V1_7Dragon v = new V1_7Dragon();
 						v.removeEnderdragon(arena);
@@ -66,6 +71,9 @@ public class Tools {
 						v.removeWither(arena);
 					} else if (m.mode1_7_10) {
 						V1_7_10Wither v = new V1_7_10Wither();
+						v.removeWither(arena);
+					} else if (m.mode1_8) {
+						V1_8Wither v = new V1_8Wither();
 						v.removeWither(arena);
 					} else {
 						V1_7Wither v = new V1_7Wither();
@@ -98,6 +106,9 @@ public class Tools {
 						ad_ = v;
 					} else if (m.mode1_7_10) {
 						final V1_7_10Dragon v = new V1_7_10Dragon();
+						ad_ = v;
+					} else if (m.mode1_8) {
+						final V1_8Dragon v = new V1_8Dragon();
 						ad_ = v;
 					} else {
 						final V1_7Dragon v = new V1_7Dragon();
@@ -138,6 +149,9 @@ public class Tools {
 						aw_ = v;
 					} else if (m.mode1_7_10) {
 						final V1_7_10Wither v = new V1_7_10Wither();
+						aw_ = v;
+					} else if (m.mode1_8) {
+						final V1_8Wither v = new V1_8Wither();
 						aw_ = v;
 					} else {
 						final V1_7Wither v = new V1_7Wither();
