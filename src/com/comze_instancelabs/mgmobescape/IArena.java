@@ -110,9 +110,7 @@ public class IArena extends Arena {
 		}
 
 		if (mobtype.equalsIgnoreCase("dragon")) {
-			AbstractDragon ad_ = this.ad;
-
-			final AbstractDragon ad = ad_;
+			final AbstractDragon ad = this.ad;
 
 			final Location l1 = Util.getComponentForArena(m, arena, "bounds.low");
 			final Location l2 = Util.getComponentForArena(m, arena, "bounds.high");
@@ -254,6 +252,14 @@ public class IArena extends Arena {
 
 	public Location getLastDragonWaypointLoc(String arena) {
 		return m.getAllPoints(m, arena).get(m.getAllPoints(m, arena).size() - 1);
+	}
+
+	public AbstractDragon getDragonUtil() {
+		return ad;
+	}
+
+	public AbstractWither getWitherUtil() {
+		return aw;
 	}
 
 	public AbstractMEDragon getDragon() {

@@ -159,17 +159,4 @@ public class MEDragon extends EntityEnderDragon implements AbstractMEDragon {
 		this.pitch = pitch;
 	}
 
-	/*
-	 * public void setYawPitch(Vector l) { double dx = l.getX() - this.locX; double dy = l.getY() - this.locY; double dz = l.getZ() - this.locZ;
-	 * 
-	 * if (dx != 0) { if (dx < 0) { this.yaw = (float) (1.5 * Math.PI); } else { this.yaw = (float) (0.5 * Math.PI); } this.yaw = (float) this.yaw -
-	 * (float) Math.atan(dz / dx); } else if (dz < 0) { this.yaw = (float) Math.PI; }
-	 * 
-	 * double dxz = Math.sqrt(Math.pow(dx, 2) + Math.pow(dz, 2));
-	 * 
-	 * pitch = (float) -Math.atan(dy / dxz);
-	 * 
-	 * this.yaw = -yaw * 180F / (float) Math.PI - 180F; this.pitch = pitch * 180F / (float) Math.PI - 180F; }
-	 */
-
 }
