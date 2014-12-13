@@ -121,12 +121,14 @@ public class Tools {
 						Bukkit.getScheduler().runTask(m, new Runnable() {
 							public void run() {
 								if (b.getType() != Material.AIR) {
-									ad.playBlockBreakParticles(b.getLocation(), b.getType());
-									if (b.getType() != Material.WATER && b.getType() != Material.LAVA && m.spawn_falling_blocks) {
-										FallingBlock fb = l.getWorld().spawnFallingBlock(b.getLocation(), b.getType(), b.getData());
-										fb.setMetadata("1337", new FixedMetadataValue(m, "true"));
-										fb.setDropItem(false);
-										fb.setVelocity(new Vector(Math.random() * 0.4, 0.4, Math.random() * 0.4));
+									if (m.spawn_falling_blocks) {
+										ad.playBlockBreakParticles(b.getLocation(), b.getType());
+										if (b.getType() != Material.WATER && b.getType() != Material.LAVA && m.spawn_falling_blocks) {
+											FallingBlock fb = l.getWorld().spawnFallingBlock(b.getLocation(), b.getType(), b.getData());
+											fb.setMetadata("1337", new FixedMetadataValue(m, "true"));
+											fb.setDropItem(false);
+											fb.setVelocity(new Vector(Math.random() * 0.4, 0.4, Math.random() * 0.4));
+										}
 									}
 									a.getSmartReset().addChanged(b, b.getType().equals(Material.CHEST));
 									b.setType(Material.AIR);

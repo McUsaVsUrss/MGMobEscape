@@ -112,7 +112,7 @@ public class Main extends JavaPlugin implements Listener {
 		pli = pinstance;
 
 		this.getConfig().addDefault("config.mob_name", "Dragon");
-		this.getConfig().addDefault("config.mob_speed", mob_speed);
+		this.getConfig().addDefault("config.mob_speed", 1);
 		this.getConfig().addDefault("config.destroy_radius", destroy_radius);
 		this.getConfig().addDefault("config.spawn_falling_blocks", spawn_falling_blocks);
 		this.getConfig().addDefault("config.all_living_players_win", all_living_players_win);
