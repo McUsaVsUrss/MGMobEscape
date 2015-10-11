@@ -4,9 +4,9 @@ import org.bukkit.util.Vector;
 
 public interface AbstractMEWither {
 
-	public Vector getNextPosition();
+    public Vector getNextPosition();
 
-	public void setPosition(double x, double y, double z);
+    public void setPosition(double x, double y, double z);
 
-	public void setYawPitch(float yaw, float pitch);
+    public void setYawPitch(float yaw, float pitch);
 }

@@ -1,5 +1,8 @@
 package com.comze_instancelabs.mgmobescape.mobtools;
 
+import com.comze_instancelabs.mgmobescape.*;
+import com.comze_instancelabs.mgmobescape.v1_8._R3.V1_8Dragon;
+import com.comze_instancelabs.mgmobescape.v1_8._R3.V1_8Wither;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -9,146 +12,137 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
-import com.comze_instancelabs.mgmobescape.AbstractDragon;
-import com.comze_instancelabs.mgmobescape.AbstractMEDragon;
-import com.comze_instancelabs.mgmobescape.AbstractMEWither;
-import com.comze_instancelabs.mgmobescape.AbstractWither;
-import com.comze_instancelabs.mgmobescape.IArena;
-import com.comze_instancelabs.mgmobescape.Main;
-import com.comze_instancelabs.mgmobescape.v1_8._R3.V1_8Dragon;
-import com.comze_instancelabs.mgmobescape.v1_8._R3.V1_8Wither;
-
 public class Tools {
 
-	// the boolean parameters in this function are not used anymore
-	public void stop(final Main m, BukkitTask t, final String arena, final String type) {
+    // the boolean parameters in this function are not used anymore
+    public static void destroy(final Main m, final Location l, final Location l2, String arena, int length2, String type, boolean mode1_6, boolean mode1_7_5) {
+        final IArena a = (IArena) m.pli.getArenaByName(arena);
+        for (int i = 0; i < m.destroy_radius; i++) { // length1
+            for (int j = 0; j < m.destroy_radius; j++) {
+                if (type.equalsIgnoreCase("dragon")) {
+                    final AbstractDragon ad = a.getDragonUtil();
 
-		if (t != null) {
-			t.cancel();
-		}
+                    for (final Block b : ad.getLoc(m, l, arena, i, j - (m.destroy_radius / 3), l2)) {
+                        // Bukkit.getScheduler().runTask(m, new Runnable() {
+                        // public void run() {
+                        if (b.getType() != Material.AIR) {
+                            if (m.spawn_falling_blocks) {
+                                ad.playBlockBreakParticles(b.getLocation(), b.getType());
+                                if (b.getType() != Material.WATER && b.getType() != Material.LAVA && m.spawn_falling_blocks) {
+                                    FallingBlock fb = l.getWorld().spawnFallingBlock(b.getLocation(), b.getType(), b.getData());
+                                    fb.setMetadata("1337", new FixedMetadataValue(m, "true"));
+                                    fb.setDropItem(false);
+                                    fb.setVelocity(new Vector(Math.random() * 0.4, 0.4, Math.random() * 0.4));
+                                }
+                            }
+                            a.getSmartReset().addChanged(b, b.getType().equals(Material.CHEST));
+                            b.setType(Material.AIR);
+                        }
+                        // }
+                        // });
+                    }
+                } else if (type.equalsIgnoreCase("wither")) {
+                    final AbstractWither aw = a.getWitherUtil();
 
-		Bukkit.getScheduler().runTaskLater(m, new Runnable() {
-			public void run() {
-				if (type.equalsIgnoreCase("dragon")) {
-						V1_8Dragon v = new V1_8Dragon();
-						v.removeEnderdragon(arena);
-				} else if (type.equalsIgnoreCase("wither")) {
-						V1_8Wither v = new V1_8Wither();
-						v.removeWither(arena);
-				}
-			}
-		}, 10L);
+                    for (final Block b : aw.getLoc(m, l, arena, i, j - (m.destroy_radius / 3), l2)) {
+                        // Bukkit.getScheduler().runTask(m, new Runnable() {
+                        // public void run() {
+                        if (b.getType() != Material.AIR) {
+                            if (m.spawn_falling_blocks) {
+                                aw.playBlockBreakParticles(b.getLocation(), b.getType());
+                                if (b.getType() != Material.WATER && b.getType() != Material.LAVA && m.spawn_falling_blocks) {
+                                    FallingBlock fb = l.getWorld().spawnFallingBlock(b.getLocation(), b.getType(), b.getData());
+                                    fb.setMetadata("1337", new FixedMetadataValue(m, "true"));
+                                    fb.setVelocity(new Vector(Math.random() * 0.4, 0.4, Math.random() * 0.4));
+                                }
+                            }
+                            a.getSmartReset().addChanged(b, b.getType().equals(Material.CHEST));
+                            b.setType(Material.AIR);
+                        }
+                        // }
+                        // });
+                    }
 
-	}
+                }
+            }
+        }
+    }
 
-	// the boolean parameters in this function are not used anymore
-	public static void destroy(final Main m, final Location l, final Location l2, String arena, int length2, String type, boolean mode1_6, boolean mode1_7_5) {
-		final IArena a = (IArena) m.pli.getArenaByName(arena);
-		for (int i = 0; i < m.destroy_radius; i++) { // length1
-			for (int j = 0; j < m.destroy_radius; j++) {
-				if (type.equalsIgnoreCase("dragon")) {
-					final AbstractDragon ad = a.getDragonUtil();
+    public static void setYawPitchDragon(AbstractMEDragon ad, Vector start, Vector l) {
+        double dx = l.getX() - start.getX();
+        double dy = l.getY() - start.getY();
+        double dz = l.getZ() - start.getZ();
 
-					for (final Block b : ad.getLoc(m, l, arena, i, j - (m.destroy_radius / 3), l2)) {
-						// Bukkit.getScheduler().runTask(m, new Runnable() {
-						// public void run() {
-						if (b.getType() != Material.AIR) {
-							if (m.spawn_falling_blocks) {
-								ad.playBlockBreakParticles(b.getLocation(), b.getType());
-								if (b.getType() != Material.WATER && b.getType() != Material.LAVA && m.spawn_falling_blocks) {
-									FallingBlock fb = l.getWorld().spawnFallingBlock(b.getLocation(), b.getType(), b.getData());
-									fb.setMetadata("1337", new FixedMetadataValue(m, "true"));
-									fb.setDropItem(false);
-									fb.setVelocity(new Vector(Math.random() * 0.4, 0.4, Math.random() * 0.4));
-								}
-							}
-							a.getSmartReset().addChanged(b, b.getType().equals(Material.CHEST));
-							b.setType(Material.AIR);
-						}
-						// }
-						// });
-					}
-				} else if (type.equalsIgnoreCase("wither")) {
-					final AbstractWither aw = a.getWitherUtil();
+        float yaw = 0F;
+        float pitch = 0F;
 
-					for (final Block b : aw.getLoc(m, l, arena, i, j - (m.destroy_radius / 3), l2)) {
-						// Bukkit.getScheduler().runTask(m, new Runnable() {
-						// public void run() {
-						if (b.getType() != Material.AIR) {
-							if (m.spawn_falling_blocks) {
-								aw.playBlockBreakParticles(b.getLocation(), b.getType());
-								if (b.getType() != Material.WATER && b.getType() != Material.LAVA && m.spawn_falling_blocks) {
-									FallingBlock fb = l.getWorld().spawnFallingBlock(b.getLocation(), b.getType(), b.getData());
-									fb.setMetadata("1337", new FixedMetadataValue(m, "true"));
-									fb.setVelocity(new Vector(Math.random() * 0.4, 0.4, Math.random() * 0.4));
-								}
-							}
-							a.getSmartReset().addChanged(b, b.getType().equals(Material.CHEST));
-							b.setType(Material.AIR);
-						}
-						// }
-						// });
-					}
+        if (dx != 0) {
+            if (dx < 0) {
+                yaw = (float) (1.5 * Math.PI);
+            } else {
+                yaw = (float) (0.5 * Math.PI);
+            }
+            yaw = (float) yaw - (float) Math.atan(dz / dx);
+        } else if (dz < 0) {
+            yaw = (float) Math.PI;
+        }
 
-				}
-			}
-		}
-	}
+        double dxz = Math.sqrt(Math.pow(dx, 2) + Math.pow(dz, 2));
 
-	public static void setYawPitchDragon(AbstractMEDragon ad, Vector start, Vector l) {
-		double dx = l.getX() - start.getX();
-		double dy = l.getY() - start.getY();
-		double dz = l.getZ() - start.getZ();
+        pitch = (float) -Math.atan(dy / dxz);
 
-		float yaw = 0F;
-		float pitch = 0F;
+        if (ad != null) {
+            ad.setYawPitch(-yaw * 180F / (float) Math.PI - 180F, pitch * 180F / (float) Math.PI - 180F);
+        }
+    }
 
-		if (dx != 0) {
-			if (dx < 0) {
-				yaw = (float) (1.5 * Math.PI);
-			} else {
-				yaw = (float) (0.5 * Math.PI);
-			}
-			yaw = (float) yaw - (float) Math.atan(dz / dx);
-		} else if (dz < 0) {
-			yaw = (float) Math.PI;
-		}
+    public static void setYawPitchWither(AbstractMEWither aw, Vector start, Vector l) {
+        double dx = l.getX() - start.getX();
+        double dy = l.getY() - start.getY();
+        double dz = l.getZ() - start.getZ();
 
-		double dxz = Math.sqrt(Math.pow(dx, 2) + Math.pow(dz, 2));
+        float yaw = 0F;
+        float pitch = 0F;
 
-		pitch = (float) -Math.atan(dy / dxz);
+        if (dx != 0) {
+            if (dx < 0) {
+                yaw = (float) (1.5 * Math.PI);
+            } else {
+                yaw = (float) (0.5 * Math.PI);
+            }
+            yaw = (float) yaw - (float) Math.atan(dz / dx);
+        } else if (dz < 0) {
+            yaw = (float) Math.PI;
+        }
 
-		if (ad != null) {
-			ad.setYawPitch(-yaw * 180F / (float) Math.PI - 180F, pitch * 180F / (float) Math.PI - 180F);
-		}
-	}
+        double dxz = Math.sqrt(Math.pow(dx, 2) + Math.pow(dz, 2));
 
-	public static void setYawPitchWither(AbstractMEWither aw, Vector start, Vector l) {
-		double dx = l.getX() - start.getX();
-		double dy = l.getY() - start.getY();
-		double dz = l.getZ() - start.getZ();
+        pitch = (float) -Math.atan(dy / dxz);
 
-		float yaw = 0F;
-		float pitch = 0F;
+        if (aw != null) {
+            aw.setYawPitch(-yaw * 180F / (float) Math.PI, pitch * 180F / (float) Math.PI);
+        }
+    }
 
-		if (dx != 0) {
-			if (dx < 0) {
-				yaw = (float) (1.5 * Math.PI);
-			} else {
-				yaw = (float) (0.5 * Math.PI);
-			}
-			yaw = (float) yaw - (float) Math.atan(dz / dx);
-		} else if (dz < 0) {
-			yaw = (float) Math.PI;
-		}
+    // the boolean parameters in this function are not used anymore
+    public void stop(final Main m, BukkitTask t, final String arena, final String type) {
 
-		double dxz = Math.sqrt(Math.pow(dx, 2) + Math.pow(dz, 2));
+        if (t != null) {
+            t.cancel();
+        }
 
-		pitch = (float) -Math.atan(dy / dxz);
+        Bukkit.getScheduler().runTaskLater(m, new Runnable() {
+            public void run() {
+                if (type.equalsIgnoreCase("dragon")) {
+                    V1_8Dragon v = new V1_8Dragon();
+                    v.removeEnderdragon(arena);
+                } else if (type.equalsIgnoreCase("wither")) {
+                    V1_8Wither v = new V1_8Wither();
+                    v.removeWither(arena);
+                }
+            }
+        }, 10L);
 
-		if (aw != null) {
-			aw.setYawPitch(-yaw * 180F / (float) Math.PI, pitch * 180F / (float) Math.PI);
-		}
-	}
+    }
 
 }
