@@ -15,18 +15,8 @@ import com.comze_instancelabs.mgmobescape.AbstractMEWither;
 import com.comze_instancelabs.mgmobescape.AbstractWither;
 import com.comze_instancelabs.mgmobescape.IArena;
 import com.comze_instancelabs.mgmobescape.Main;
-import com.comze_instancelabs.mgmobescape.v1_6.V1_6Dragon;
-import com.comze_instancelabs.mgmobescape.v1_6.V1_6Wither;
-import com.comze_instancelabs.mgmobescape.v1_7.V1_7Dragon;
-import com.comze_instancelabs.mgmobescape.v1_7.V1_7Wither;
-import com.comze_instancelabs.mgmobescape.v1_7._R2.V1_7_5Dragon;
-import com.comze_instancelabs.mgmobescape.v1_7._R2.V1_7_5Wither;
-import com.comze_instancelabs.mgmobescape.v1_7._R3.V1_7_8Dragon;
-import com.comze_instancelabs.mgmobescape.v1_7._R3.V1_7_8Wither;
-import com.comze_instancelabs.mgmobescape.v1_7._R4.V1_7_10Dragon;
-import com.comze_instancelabs.mgmobescape.v1_7._R4.V1_7_10Wither;
-import com.comze_instancelabs.mgmobescape.v1_8._R1.V1_8Dragon;
-import com.comze_instancelabs.mgmobescape.v1_8._R1.V1_8Wither;
+import com.comze_instancelabs.mgmobescape.v1_8._R3.V1_8Dragon;
+import com.comze_instancelabs.mgmobescape.v1_8._R3.V1_8Wither;
 
 public class Tools {
 
@@ -40,45 +30,11 @@ public class Tools {
 		Bukkit.getScheduler().runTaskLater(m, new Runnable() {
 			public void run() {
 				if (type.equalsIgnoreCase("dragon")) {
-					if (m.mode1_6) {
-						V1_6Dragon v = new V1_6Dragon();
-						v.removeEnderdragon(arena);
-					} else if (m.mode1_7_5) {
-						V1_7_5Dragon v = new V1_7_5Dragon();
-						v.removeEnderdragon(arena);
-					} else if (m.mode1_7_8) {
-						V1_7_8Dragon v = new V1_7_8Dragon();
-						v.removeEnderdragon(arena);
-					} else if (m.mode1_7_10) {
-						V1_7_10Dragon v = new V1_7_10Dragon();
-						v.removeEnderdragon(arena);
-					} else if (m.mode1_8) {
 						V1_8Dragon v = new V1_8Dragon();
 						v.removeEnderdragon(arena);
-					} else {
-						V1_7Dragon v = new V1_7Dragon();
-						v.removeEnderdragon(arena);
-					}
 				} else if (type.equalsIgnoreCase("wither")) {
-					if (m.mode1_6) {
-						V1_6Wither v = new V1_6Wither();
-						v.removeWither(arena);
-					} else if (m.mode1_7_5) {
-						V1_7_5Wither v = new V1_7_5Wither();
-						v.removeWither(arena);
-					} else if (m.mode1_7_8) {
-						V1_7_8Wither v = new V1_7_8Wither();
-						v.removeWither(arena);
-					} else if (m.mode1_7_10) {
-						V1_7_10Wither v = new V1_7_10Wither();
-						v.removeWither(arena);
-					} else if (m.mode1_8) {
 						V1_8Wither v = new V1_8Wither();
 						v.removeWither(arena);
-					} else {
-						V1_7Wither v = new V1_7Wither();
-						v.removeWither(arena);
-					}
 				}
 			}
 		}, 10L);

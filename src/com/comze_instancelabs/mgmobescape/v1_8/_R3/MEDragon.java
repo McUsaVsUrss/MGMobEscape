@@ -1,22 +1,22 @@
-package com.comze_instancelabs.mgmobescape.v1_7._R3;
+package com.comze_instancelabs.mgmobescape.v1_8._R3;
 
 import java.util.ArrayList;
 
-import net.minecraft.server.v1_7_R3.DamageSource;
-import net.minecraft.server.v1_7_R3.EntityComplexPart;
-import net.minecraft.server.v1_7_R3.EntityWither;
-import net.minecraft.server.v1_7_R3.World;
+import net.minecraft.server.v1_8_R3.DamageSource;
+import net.minecraft.server.v1_8_R3.EntityComplexPart;
+import net.minecraft.server.v1_8_R3.EntityEnderDragon;
+import net.minecraft.server.v1_8_R3.World;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import com.comze_instancelabs.mgmobescape.AbstractMEWither;
+import com.comze_instancelabs.mgmobescape.AbstractMEDragon;
 import com.comze_instancelabs.mgmobescape.IArena;
 import com.comze_instancelabs.mgmobescape.Main;
 import com.comze_instancelabs.mgmobescape.mobtools.Tools;
 import com.comze_instancelabs.minigamesapi.MinigamesAPI;
 
-public class MEWither extends EntityWither implements AbstractMEWither{
+public class MEDragon extends EntityEnderDragon implements AbstractMEDragon {
 
 	private boolean onGround = false;
 	private ArrayList<Vector> points = new ArrayList();
@@ -26,8 +26,8 @@ public class MEWither extends EntityWither implements AbstractMEWither{
 	private double Z;
 	private Main m;
 	private IArena arena;
-	
-	public MEWither(Main m, String arena, Location loc, World world, ArrayList<Vector> p) {
+
+	public MEDragon(Main m, String arena, Location loc, World world, ArrayList<Vector> p) {
 		super(world);
 		this.m = m;
 		this.arena = (IArena) MinigamesAPI.getAPI().pinstances.get(m).getArenaByName(arena);
@@ -50,7 +50,7 @@ public class MEWither extends EntityWither implements AbstractMEWither{
 		} else {
 			yaw = 270F;
 		}
-		
+
 		double disX = (this.locX - points.get(currentid).getX());
 		double disY = (this.locY - points.get(currentid).getY());
 		double disZ = (this.locZ - points.get(currentid).getZ());
@@ -63,7 +63,7 @@ public class MEWither extends EntityWither implements AbstractMEWither{
 	}
 
 	@Override
-	public void e() {
+	public void m() {
 		return;
 	}
 
@@ -80,19 +80,19 @@ public class MEWither extends EntityWither implements AbstractMEWither{
 		return false;
 	}
 
-	public Vector getCurrentPosition(){
+	public Vector getCurrentPosition() {
 		return points.get(currentid);
 	}
-	
-	public Vector getCurrentPositionNext(){
-		if(currentid + 1 < points.size() - 1){
+
+	public Vector getCurrentPositionNext() {
+		if (currentid + 1 < points.size() - 1) {
 			return points.get(currentid + 1);
 		}
 		return points.get(currentid);
 	}
-	
+
 	public Vector getNextPosition() {
-		
+
 		double tempx = this.locX;
 		double tempy = this.locY;
 		double tempz = this.locZ;
@@ -115,22 +115,22 @@ public class MEWither extends EntityWither implements AbstractMEWither{
 					}
 				}
 			}
-			
+
 			double disX = (this.locX - points.get(currentid).getX());
 			double disY = (this.locY - points.get(currentid).getY());
 			double disZ = (this.locZ - points.get(currentid).getZ());
-			
+
 			double tick_ = Math.sqrt(disX * disX + disY * disY + disZ * disZ) * 2 / m.mob_speed * Math.pow(0.98, currentid);
 
 			this.X = (Math.abs(disX) / tick_);
 			this.Y = (Math.abs(disY) / tick_);
 			this.Z = (Math.abs(disZ) / tick_);
 
-			Tools.setYawPitchWither(arena.getWither(), new Vector(this.locX, this.locY, this.locZ), points.get(currentid));
+			Tools.setYawPitchDragon(arena.getDragon(), new Vector(this.locX, this.locY, this.locZ), points.get(currentid));
 
 		}
 
-		Tools.setYawPitchWither(arena.getWither(), new Vector(this.locX, this.locY, this.locZ), points.get(currentid));
+		Tools.setYawPitchDragon(arena.getDragon(), new Vector(this.locX, this.locY, this.locZ), points.get(currentid));
 
 		if (tempx < points.get(currentid).getX())
 			tempx += this.X;
@@ -149,13 +149,27 @@ public class MEWither extends EntityWither implements AbstractMEWither{
 		else {
 			tempz -= this.Z;
 		}
-		
+
 		return new Vector(tempx, tempy, tempz);
 	}
-	
+
 	@Override
 	public void setYawPitch(float yaw, float pitch) {
 		this.yaw = yaw;
 		this.pitch = pitch;
 	}
+
+	/*
+	 * public void setYawPitch(Vector l) { double dx = l.getX() - this.locX; double dy = l.getY() - this.locY; double dz = l.getZ() - this.locZ;
+	 * 
+	 * if (dx != 0) { if (dx < 0) { this.yaw = (float) (1.5 * Math.PI); } else { this.yaw = (float) (0.5 * Math.PI); } this.yaw = (float) this.yaw -
+	 * (float) Math.atan(dz / dx); } else if (dz < 0) { this.yaw = (float) Math.PI; }
+	 * 
+	 * double dxz = Math.sqrt(Math.pow(dx, 2) + Math.pow(dz, 2));
+	 * 
+	 * pitch = (float) -Math.atan(dy / dxz);
+	 * 
+	 * this.yaw = -yaw * 180F / (float) Math.PI - 180F; this.pitch = pitch * 180F / (float) Math.PI - 180F; }
+	 */
+
 }

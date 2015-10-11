@@ -13,7 +13,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -31,13 +30,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
-
-import com.comze_instancelabs.mgmobescape.v1_6.V1_6Dragon;
-import com.comze_instancelabs.mgmobescape.v1_7.V1_7Dragon;
-import com.comze_instancelabs.mgmobescape.v1_7._R2.V1_7_5Dragon;
-import com.comze_instancelabs.mgmobescape.v1_7._R3.V1_7_8Dragon;
-import com.comze_instancelabs.mgmobescape.v1_7._R4.V1_7_10Dragon;
-import com.comze_instancelabs.mgmobescape.v1_8._R1.V1_8Dragon;
+import com.comze_instancelabs.mgmobescape.v1_8._R3.V1_8Dragon;
 import com.comze_instancelabs.minigamesapi.Arena;
 import com.comze_instancelabs.minigamesapi.ArenaSetup;
 import com.comze_instancelabs.minigamesapi.ArenaState;
@@ -66,11 +59,6 @@ public class Main extends JavaPlugin implements Listener {
 	public boolean pvp = true;
 
 	public double mob_speed = 1.0;
-	public static boolean mode1_6 = false;
-	public static boolean mode1_7_5 = false;
-	public static boolean mode1_7_8 = false;
-	public static boolean mode1_7_10 = false;
-	public static boolean mode1_8 = false;
 
 	public HashMap<String, Integer> ppoint = new HashMap<String, Integer>();
 	public ArrayList<String> p_used_kit = new ArrayList<String>();
@@ -80,26 +68,6 @@ public class Main extends JavaPlugin implements Listener {
 		m = this;
 		getServer().getPluginManager().registerEvents(this, this);
 		String version = Bukkit.getServer().getClass().getPackage().getName().substring(Bukkit.getServer().getClass().getPackage().getName().lastIndexOf(".") + 1);
-
-		if (version.contains("1_6_R3")) {
-			mode1_6 = true;
-			getLogger().info("Turned on 1.6.4 mode.");
-		} else if (version.contains("1_7_R1")) {
-			// default
-			getLogger().info("Turned on 1.7.2 mode.");
-		} else if (version.contains("1_7_R2")) {
-			mode1_7_5 = true;
-			getLogger().info("Turned on 1.7.5 mode.");
-		} else if (version.contains("1_7_R3")) {
-			mode1_7_8 = true;
-			getLogger().info("Turned on 1.7.8 mode.");
-		} else if (version.contains("1_7_R4")) {
-			mode1_7_10 = true;
-			getLogger().info("Turned on 1.7.10 mode.");
-		} else if (version.contains("1_8_R1")) {
-			mode1_8 = true;
-			getLogger().info("Turned on 1.8 mode.");
-		}
 		registerEntities();
 
 		api = MinigamesAPI.getAPI().setupAPI(this, "mobescape", IArena.class, new ArenasConfig(this), new MessagesConfig(this), new IClassesConfig(this), new StatsConfig(this, false), new DefaultConfig(this, false), false);
@@ -155,18 +123,7 @@ public class Main extends JavaPlugin implements Listener {
 	}
 
 	private boolean registerEntities() {
-		if (mode1_6) {
-			return V1_6Dragon.registerEntities();
-		} else if (mode1_7_5) {
-			return V1_7_5Dragon.registerEntities();
-		} else if (mode1_7_8) {
-			return V1_7_8Dragon.registerEntities();
-		} else if (mode1_7_10) {
-			return V1_7_10Dragon.registerEntities();
-		} else if (mode1_8) {
-			return V1_8Dragon.registerEntities();
-		}
-		return V1_7Dragon.registerEntities();
+		return V1_8Dragon.registerEntities();
 	}
 
 	public static ArrayList<Arena> loadArenas(JavaPlugin plugin, ArenasConfig cf) {

@@ -1,18 +1,18 @@
-package com.comze_instancelabs.mgmobescape.v1_8._R1;
+package com.comze_instancelabs.mgmobescape.v1_8._R3;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import net.minecraft.server.v1_8_R1.BlockPosition;
-import net.minecraft.server.v1_8_R1.EntityTypes;
-import net.minecraft.server.v1_8_R1.PacketPlayOutWorldEvent;
+import net.minecraft.server.v1_8_R3.BlockPosition;
+import net.minecraft.server.v1_8_R3.EntityTypes;
+import net.minecraft.server.v1_8_R3.PacketPlayOutWorldEvent;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_8_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.scheduler.BukkitTask;
@@ -112,9 +112,9 @@ public class V1_8Dragon implements AbstractDragon {
 			m.getLogger().severe("You forgot to set any FlyPoints! You need to have min. 2 and one of them has to be at finish.");
 			return null;
 		}
-		MEDragon t_ = new MEDragon(m, arena, t, (net.minecraft.server.v1_8_R1.World) ((CraftWorld) t.getWorld()).getHandle(), temp);
-		((net.minecraft.server.v1_8_R1.World) w).addEntity(t_, CreatureSpawnEvent.SpawnReason.CUSTOM);
-		System.out.println(((net.minecraft.server.v1_8_R1.World) w).entityList.contains(t_));
+		MEDragon t_ = new MEDragon(m, arena, t, (net.minecraft.server.v1_8_R3.World) ((CraftWorld) t.getWorld()).getHandle(), temp);
+		((net.minecraft.server.v1_8_R3.World) w).addEntity(t_, CreatureSpawnEvent.SpawnReason.CUSTOM);
+		System.out.println(((net.minecraft.server.v1_8_R3.World) w).entityList.contains(t_));
 		t_.setCustomName(m.dragon_name);
 		dragons.put(arena, t_);
 		return t_;

@@ -6,19 +6,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
-
-import com.comze_instancelabs.mgmobescape.v1_6.V1_6Dragon;
-import com.comze_instancelabs.mgmobescape.v1_6.V1_6Wither;
-import com.comze_instancelabs.mgmobescape.v1_7.V1_7Dragon;
-import com.comze_instancelabs.mgmobescape.v1_7.V1_7Wither;
-import com.comze_instancelabs.mgmobescape.v1_7._R2.V1_7_5Dragon;
-import com.comze_instancelabs.mgmobescape.v1_7._R2.V1_7_5Wither;
-import com.comze_instancelabs.mgmobescape.v1_7._R3.V1_7_8Dragon;
-import com.comze_instancelabs.mgmobescape.v1_7._R3.V1_7_8Wither;
-import com.comze_instancelabs.mgmobescape.v1_7._R4.V1_7_10Dragon;
-import com.comze_instancelabs.mgmobescape.v1_7._R4.V1_7_10Wither;
-import com.comze_instancelabs.mgmobescape.v1_8._R1.V1_8Dragon;
-import com.comze_instancelabs.mgmobescape.v1_8._R1.V1_8Wither;
+import com.comze_instancelabs.mgmobescape.v1_8._R3.V1_8Dragon;
+import com.comze_instancelabs.mgmobescape.v1_8._R3.V1_8Wither;
 import com.comze_instancelabs.minigamesapi.Arena;
 import com.comze_instancelabs.minigamesapi.ArenaType;
 import com.comze_instancelabs.minigamesapi.MinigamesAPI;
@@ -68,45 +57,11 @@ public class IArena extends Arena {
 			Util.saveComponentForArena(m, arena, "mobspawn", a.getSpawns().get(0).clone().add(0D, 3D, 0D));
 		}
 		if (mobtype.equalsIgnoreCase("dragon")) {
-			if (m.mode1_6) {
-				ad = new V1_6Dragon();
-				setDragon(V1_6Dragon.spawnEnderdragon1_6(m, arena, a.getDragonSpawn()));
-			} else if (m.mode1_7_5) {
-				ad = new V1_7_5Dragon();
-				setDragon(V1_7_5Dragon.spawnEnderdragon(m, arena, a.getDragonSpawn()));
-			} else if (m.mode1_7_8) {
-				ad = new V1_7_8Dragon();
-				setDragon(V1_7_8Dragon.spawnEnderdragon(m, arena, a.getDragonSpawn()));
-			} else if (m.mode1_7_10) {
-				ad = new V1_7_10Dragon();
-				setDragon(V1_7_10Dragon.spawnEnderdragon(m, arena, a.getDragonSpawn()));
-			} else if (m.mode1_8) {
 				ad = new V1_8Dragon();
 				setDragon(V1_8Dragon.spawnEnderdragon(m, arena, a.getDragonSpawn()));
-			} else {
-				ad = new V1_7Dragon();
-				setDragon(V1_7Dragon.spawnEnderdragon(m, arena, a.getDragonSpawn()));
-			}
 		} else {
-			if (m.mode1_6) {
-				aw = new V1_6Wither();
-				setWither(V1_6Wither.spawnWither1_6(m, arena, a.getDragonSpawn()));
-			} else if (m.mode1_7_5) {
-				aw = new V1_7_5Wither();
-				setWither(V1_7_5Wither.spawnWither(m, arena, a.getDragonSpawn()));
-			} else if (m.mode1_7_8) {
-				aw = new V1_7_8Wither();
-				setWither(V1_7_8Wither.spawnWither(m, arena, a.getDragonSpawn()));
-			} else if (m.mode1_7_10) {
-				aw = new V1_7_10Wither();
-				setWither(V1_7_10Wither.spawnWither(m, arena, a.getDragonSpawn()));
-			} else if (m.mode1_8) {
 				aw = new V1_8Wither();
 				setWither(V1_8Wither.spawnWither(m, arena, a.getDragonSpawn()));
-			} else {
-				aw = new V1_7Wither();
-				setWither(V1_7Wither.spawnWither(m, arena, a.getDragonSpawn()));
-			}
 		}
 
 		if (mobtype.equalsIgnoreCase("dragon")) {

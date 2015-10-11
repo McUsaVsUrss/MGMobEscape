@@ -1,22 +1,22 @@
-package com.comze_instancelabs.mgmobescape.v1_7._R4;
+package com.comze_instancelabs.mgmobescape.v1_8._R3;
 
 import java.util.ArrayList;
 
-import net.minecraft.server.v1_7_R4.DamageSource;
-import net.minecraft.server.v1_7_R4.EntityComplexPart;
-import net.minecraft.server.v1_7_R4.EntityEnderDragon;
-import net.minecraft.server.v1_7_R4.World;
+import net.minecraft.server.v1_8_R3.DamageSource;
+import net.minecraft.server.v1_8_R3.EntityComplexPart;
+import net.minecraft.server.v1_8_R3.EntityWither;
+import net.minecraft.server.v1_8_R3.World;
 
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import com.comze_instancelabs.mgmobescape.AbstractMEDragon;
+import com.comze_instancelabs.mgmobescape.AbstractMEWither;
 import com.comze_instancelabs.mgmobescape.IArena;
 import com.comze_instancelabs.mgmobescape.Main;
 import com.comze_instancelabs.mgmobescape.mobtools.Tools;
 import com.comze_instancelabs.minigamesapi.MinigamesAPI;
 
-public class MEDragon extends EntityEnderDragon implements AbstractMEDragon {
+public class MEWither extends EntityWither implements AbstractMEWither {
 
 	private boolean onGround = false;
 	private ArrayList<Vector> points = new ArrayList();
@@ -27,7 +27,7 @@ public class MEDragon extends EntityEnderDragon implements AbstractMEDragon {
 	private Main m;
 	private IArena arena;
 
-	public MEDragon(Main m, String arena, Location loc, World world, ArrayList<Vector> p) {
+	public MEWither(Main m, String arena, Location loc, World world, ArrayList<Vector> p) {
 		super(world);
 		this.m = m;
 		this.arena = (IArena) MinigamesAPI.getAPI().pinstances.get(m).getArenaByName(arena);
@@ -63,7 +63,7 @@ public class MEDragon extends EntityEnderDragon implements AbstractMEDragon {
 	}
 
 	@Override
-	public void e() {
+	public void m() {
 		return;
 	}
 
@@ -126,11 +126,11 @@ public class MEDragon extends EntityEnderDragon implements AbstractMEDragon {
 			this.Y = (Math.abs(disY) / tick_);
 			this.Z = (Math.abs(disZ) / tick_);
 
-			Tools.setYawPitchDragon(arena.getDragon(), new Vector(this.locX, this.locY, this.locZ), points.get(currentid));
+			Tools.setYawPitchWither(arena.getWither(), new Vector(this.locX, this.locY, this.locZ), points.get(currentid));
 
 		}
 
-		Tools.setYawPitchDragon(arena.getDragon(), new Vector(this.locX, this.locY, this.locZ), points.get(currentid));
+		Tools.setYawPitchWither(arena.getWither(), new Vector(this.locX, this.locY, this.locZ), points.get(currentid));
 
 		if (tempx < points.get(currentid).getX())
 			tempx += this.X;

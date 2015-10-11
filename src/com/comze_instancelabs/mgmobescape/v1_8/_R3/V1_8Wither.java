@@ -1,20 +1,16 @@
-package com.comze_instancelabs.mgmobescape.v1_7._R3;
+package com.comze_instancelabs.mgmobescape.v1_8._R3;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import net.minecraft.server.v1_7_R3.PacketPlayOutWorldEvent;
+import net.minecraft.server.v1_8_R3.BlockPosition;
+import net.minecraft.server.v1_8_R3.PacketPlayOutWorldEvent;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
-import org.bukkit.craftbukkit.v1_7_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_7_R3.entity.CraftPlayer;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
+import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.scheduler.BukkitTask;
@@ -26,13 +22,13 @@ import com.comze_instancelabs.mgmobescape.Main;
 import com.comze_instancelabs.mgmobescape.mobtools.Tools;
 import com.comze_instancelabs.minigamesapi.MinigamesAPI;
 
-public class V1_7_8Wither implements AbstractWither {
+public class V1_8Wither implements AbstractWither {
 
 	public static HashMap<String, MEWither> wither = new HashMap<String, MEWither>();
 
 	public void playBlockBreakParticles(final Location loc, final Material m, final Player... players) {
 		@SuppressWarnings("deprecation")
-		PacketPlayOutWorldEvent packet = new PacketPlayOutWorldEvent(2001, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), m.getId(), false);
+		PacketPlayOutWorldEvent packet = new PacketPlayOutWorldEvent(2001, new BlockPosition(loc.getX(), loc.getY(), loc.getZ()), m.getId(), false);
 		for (final Player p : players) {
 			((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
 		}
@@ -44,18 +40,18 @@ public class V1_7_8Wither implements AbstractWither {
 		 */
 		m.getLogger().info("WITHER SPAWNED " + arena + " " + t.toString());
 		Object w = ((CraftWorld) t.getWorld()).getHandle();
-		ArrayList<Vector> temp = ((IArena)MinigamesAPI.getAPI().pinstances.get(m).getArenaByName(arena)).getDragonWayPoints(arena);
+		ArrayList<Vector> temp = ((IArena) MinigamesAPI.getAPI().pinstances.get(m).getArenaByName(arena)).getDragonWayPoints(arena);
 		if (temp == null) {
 			m.getLogger().severe("You forgot to set any FlyPoints! You need to have min. 2 and one of them has to be at finish.");
 			return null;
 		}
-		MEWither t_ = new MEWither(m, arena, t, (net.minecraft.server.v1_7_R3.World) ((CraftWorld) t.getWorld()).getHandle(), temp);
-		((net.minecraft.server.v1_7_R3.World) w).addEntity(t_, CreatureSpawnEvent.SpawnReason.CUSTOM);
+		MEWither t_ = new MEWither(m, arena, t, (net.minecraft.server.v1_8_R3.World) ((CraftWorld) t.getWorld()).getHandle(), temp);
+		((net.minecraft.server.v1_8_R3.World) w).addEntity(t_, CreatureSpawnEvent.SpawnReason.CUSTOM);
 		t_.setCustomName(m.dragon_name);
 		wither.put(arena, t_);
+		t_.move(0.1D, 0.1D, 0.1D);
 		return t_;
 	}
-
 
 	public void removeWither(String arena) {
 		try {
