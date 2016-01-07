@@ -31,11 +31,11 @@ public class V1_8Wither implements AbstractWither {
         m.getLogger().info("WITHER SPAWNED " + arena + " " + t.toString());
         Object w = ((CraftWorld) t.getWorld()).getHandle();
         ArrayList<Vector> temp = ((IArena) MinigamesAPI.getAPI().pinstances.get(m).getArenaByName(arena)).getDragonWayPoints(arena);
-        if (temp == null) {
+        if (temp == null || temp.isEmpty()) {
             m.getLogger().severe("You forgot to set any FlyPoints! You need to have min. 2 and one of them has to be at finish.");
             return null;
         }
-        MEWither t_ = new MEWither(m, arena, t, (net.minecraft.server.v1_8_R3.World) ((CraftWorld) t.getWorld()).getHandle(), temp);
+        MEWither t_ = new MEWither(m, arena, t, ((CraftWorld) t.getWorld()).getHandle(), temp);
         ((net.minecraft.server.v1_8_R3.World) w).addEntity(t_, CreatureSpawnEvent.SpawnReason.CUSTOM);
         t_.setCustomName(m.dragon_name);
         wither.put(arena, t_);
